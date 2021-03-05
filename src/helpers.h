@@ -73,6 +73,18 @@ public:
     {
     }
 
+    nlohmann::json path()
+    {
+        nlohmann::json msgJson;
+        std::vector<double> next_x_vals;
+        std::vector<double> next_y_vals;
+
+        msgJson["next_x"] = next_x_vals;
+        msgJson["next_y"] = next_y_vals;
+
+        return msgJson;
+    }
+
 private:
     double x;
     double y;
