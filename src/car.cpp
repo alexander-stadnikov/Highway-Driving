@@ -1,14 +1,15 @@
 #include "car.h"
 #include "helpers.h"
 
-Car::Car(const nlohmann::json &json, const Map &map)
+Car::Car(const nlohmann::json &json, const Map &map, double ref_v)
     : m_x(json[1]["x"]),
       m_y(json[1]["y"]),
       m_s(json[1]["s"]),
       m_d(json[1]["d"]),
       m_yaw(json[1]["yaw"]),
       m_speed(json[1]["speed"]),
-      m_map(map)
+      m_map(map),
+      m_ref_v(ref_v)
 {
 }
 

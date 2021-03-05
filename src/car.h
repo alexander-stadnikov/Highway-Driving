@@ -21,7 +21,7 @@ public:
         std::vector<double> y;
     };
 
-    Car(const nlohmann::json &json, const Map &map);
+    Car(const nlohmann::json &json, const Map &map, double ref_v);
 
     PlannedPath path();
 
@@ -33,5 +33,6 @@ private:
     const double m_yaw;
     const double m_speed;
     const Map &m_map;
+    const double m_ref_v;
     Lane m_lane{Middle};
 };
