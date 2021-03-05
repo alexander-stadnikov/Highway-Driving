@@ -133,26 +133,25 @@ std::vector<double> getFrenet(double x, double y, double theta,
 }
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
-std::vector<double> getXY(double s, double d, const std::vector<double> &maps_s,
-                          const std::vector<double> &maps_x,
-                          const std::vector<double> &maps_y)
+std::vector<double> getXY(double s, double d, const Map &map)
 {
-    int prev_wp = -1;
+    int prev_wp_id = -1;
+    const auto map_size = map.waypoints.size();
 
-    while (s > maps_s[prev_wp + 1] && (prev_wp < (int)(maps_s.size() - 1)))
+    while (s > map.waypoints[prev_wp_id + 1].s && (prev_wp_id < static_cast<int>(map_size - 1)))
     {
-        ++prev_wp;
+        ++prev_wp_id;
     }
 
-    int wp2 = (prev_wp + 1) % maps_x.size();
+    const auto &wp2 = map.waypoints[(prev_wp_id + 1) % map_size];
+    const auto &prev_wp = map.waypoints[prev_wp_id];
+    double heading = atan2(wp2.y - prev_wp.y, wp2.x - prev_wp.x);
 
-    double heading = atan2((maps_y[wp2] - maps_y[prev_wp]),
-                           (maps_x[wp2] - maps_x[prev_wp]));
     // the x,y,s along the segment
-    double seg_s = (s - maps_s[prev_wp]);
+    double seg_s = (s - prev_wp.s);
 
-    double seg_x = maps_x[prev_wp] + seg_s * cos(heading);
-    double seg_y = maps_y[prev_wp] + seg_s * sin(heading);
+    double seg_x = prev_wp.x + seg_s * cos(heading);
+    double seg_y = prev_wp.y + seg_s * sin(heading);
 
     double perp_heading = heading - pi() / 2;
 

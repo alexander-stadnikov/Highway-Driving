@@ -126,6 +126,4 @@ std::vector<double> getFrenet(double x, double y, double theta,
                               const std::vector<double> &maps_y);
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
-std::vector<double> getXY(double s, double d, const std::vector<double> &maps_s,
-                          const std::vector<double> &maps_x,
-                          const std::vector<double> &maps_y);
+std::vector<double> getXY(double s, double d, const Map &map);
