@@ -60,10 +60,10 @@ private:
     nlohmann::json::const_reference &m_data;
 };
 
-class CarState
+class Car
 {
 public:
-    CarState(const nlohmann::json &json)
+    Car(const nlohmann::json &json)
         : x(json[1]["x"]),
           y(json[1]["y"]),
           s(json[1]["s"]),

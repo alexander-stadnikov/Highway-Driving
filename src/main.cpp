@@ -62,7 +62,7 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
 
             if (event == "telemetry")
             {
-                CarState carState(j);
+                Car car(j);
                 Path previousPath(j);
                 SensorFusion sensorFusion(j);
 
