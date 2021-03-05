@@ -3,11 +3,48 @@
 #include <math.h>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
+
+struct Waypoint
+{
+    double x;
+    double y;
+    double s;
+    double dx;
+    double dy;
+
+    explicit Waypoint(const std::string &data)
+    {
+        std::istringstream iss(data);
+        iss >> x;
+        iss >> y;
+        iss >> s;
+        iss >> dx;
+        iss >> dy;
+    }
+};
+struct Map
+{
+    std::vector<Waypoint> waypoints;
+
+    explicit Map(const std::string &csv)
+    {
+        std::ifstream in(csv.c_str(), std::ifstream::in);
+        std::string line;
+
+        while (getline(in, line))
+        {
+            waypoints.push_back(Waypoint(line));
+        }
+    }
+};
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
 //   else the empty string "" will be returned.
-std::string hasData(const std::string &s)
+std::string
+hasData(const std::string &s)
 {
     auto found_null = s.find("null");
     auto b1 = s.find_first_of("[");
