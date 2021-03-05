@@ -17,9 +17,10 @@ Car::PlannedPath Car::path()
     double dist_inc = 0.5;
     for (int i = 0; i < 50; ++i)
     {
-        const auto dp = (dist_inc * i);
-        path.x.push_back(m_x + dp * cos(deg2rad(m_yaw)));
-        path.y.push_back(m_y + dp * sin(deg2rad(m_yaw)));
+        const auto next_s = m_s + (i + 1) * dist_inc;
+        const auto next_xy = getXY(next_s, m_lane, {}, {}, {});
+        path.x.push_back(next_xy[0]);
+        path.y.push_back(next_xy[1]);
     }
 
     return path;
