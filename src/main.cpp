@@ -6,8 +6,10 @@
 
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
-#include "helpers.h"
 #include "json.hpp"
+
+#include "helpers.h"
+#include "car.h"
 
 void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode, const Map &map);
 
