@@ -4,6 +4,8 @@
 
 #include "json.hpp"
 
+#include "helpers.h"
+
 class Car
 {
 public:
@@ -19,7 +21,7 @@ public:
         std::vector<double> y;
     };
 
-    Car(const nlohmann::json &json);
+    Car(const nlohmann::json &json, const Map &map);
 
     PlannedPath path();
 
@@ -30,5 +32,6 @@ private:
     const double m_d;
     const double m_yaw;
     const double m_speed;
+    const Map &m_map;
     Lane m_lane{Middle};
 };

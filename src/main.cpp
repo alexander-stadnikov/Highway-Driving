@@ -48,7 +48,7 @@ int main()
     h.run();
 }
 
-void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode, const Map &)
+void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode, const Map &map)
 {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -64,7 +64,7 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
 
             if (event == "telemetry")
             {
-                Car car(j);
+                Car car(j, map);
                 Path previousPath(j);
                 SensorFusion sensorFusion(j);
 
