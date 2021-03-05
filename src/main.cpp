@@ -10,30 +10,27 @@
 #include "helpers.h"
 #include "json.hpp"
 
-// for convenience
 using nlohmann::json;
-using std::string;
-using std::vector;
 
 int main()
 {
     uWS::Hub h;
 
     // Load up map values for waypoint's x,y,s and d normalized normal vectors
-    vector<double> map_waypoints_x;
-    vector<double> map_waypoints_y;
-    vector<double> map_waypoints_s;
-    vector<double> map_waypoints_dx;
-    vector<double> map_waypoints_dy;
+    std::vector<double> map_waypoints_x;
+    std::vector<double> map_waypoints_y;
+    std::vector<double> map_waypoints_s;
+    std::vector<double> map_waypoints_dx;
+    std::vector<double> map_waypoints_dy;
 
     // Waypoint map to read from
-    string map_file_ = "../data/highway_map.csv";
+    std::string map_file_ = "../data/highway_map.csv";
     // The max s value before wrapping around the track back to 0
     double max_s = 6945.554;
 
     std::ifstream in_map_(map_file_.c_str(), std::ifstream::in);
 
-    string line;
+    std::string line;
 
     while (getline(in_map_, line))
     {
@@ -70,7 +67,7 @@ int main()
             {
                 auto j = json::parse(s);
 
-                string event = j[0].get<string>();
+                std::string event = j[0].get<std::string>();
 
                 if (event == "telemetry")
                 {
@@ -97,8 +94,8 @@ int main()
 
                     json msgJson;
 
-                    vector<double> next_x_vals;
-                    vector<double> next_y_vals;
+                    std::vector<double> next_x_vals;
+                    std::vector<double> next_y_vals;
 
                     /**
            * TODO: define a path made up of (x,y) points that the car will visit
