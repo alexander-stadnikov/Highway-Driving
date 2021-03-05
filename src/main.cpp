@@ -65,7 +65,6 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
             if (event == "telemetry")
             {
                 Car car(j, map, 49.5);
-                Path previousPath(j);
                 SensorFusion sensorFusion(j);
 
                 nlohmann::json outMsg;
