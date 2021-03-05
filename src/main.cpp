@@ -66,7 +66,11 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
                 Path previousPath(j);
                 SensorFusion sensorFusion(j);
 
-                auto msg = "42[\"control\"," + car.path().dump() + "]";
+                nlohmann::json outMsg;
+                const auto plannedPath = car.path();
+                outMsg["next_x"] = plannedPath.x;
+                outMsg["next_y"] = plannedPath.y;
+                auto msg = "42[\"control\"," + outMsg.dump() + "]";
 
                 ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
             }
