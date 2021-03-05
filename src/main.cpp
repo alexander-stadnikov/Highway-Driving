@@ -64,13 +64,9 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
             {
                 CarState carState(j);
                 Path previousPath(j);
-
-                // Sensor Fusion Data, a list of all other cars on the same side
-                //   of the road.
-                auto sensor_fusion = j[1]["sensor_fusion"];
+                SensorFusion sensorFusion(j);
 
                 nlohmann::json msgJson;
-
                 std::vector<double> next_x_vals;
                 std::vector<double> next_y_vals;
 
