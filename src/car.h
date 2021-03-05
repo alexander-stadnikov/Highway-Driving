@@ -21,18 +21,22 @@ public:
         std::vector<double> y;
     };
 
-    Car(const nlohmann::json &json, const Map &map, double ref_v);
+    Car(const Map &map, Lane lane, double ref_v);
 
+    void update(const nlohmann::json &json);
     PlannedPath path();
 
 private:
-    const double m_x;
-    const double m_y;
-    const double m_s;
-    const double m_d;
-    const double m_yaw;
-    const double m_speed;
+    void setPosition(const nlohmann::json &json);
+    void setSpeed(const nlohmann::json &json);
+
     const Map &m_map;
-    const double m_ref_v;
-    Lane m_lane{Middle};
+    Lane m_lane;
+    double m_ref_v;
+    double m_x;
+    double m_y;
+    double m_s;
+    double m_d;
+    double m_yaw;
+    double m_speed;
 };
