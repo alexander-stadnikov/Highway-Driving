@@ -19,7 +19,7 @@ int main()
     uWS::Hub h;
     Map map("../data/highway_map.csv");
     double max_s = 6945.554;
-    Car car(map, Car::Middle, 49.5);
+    Car car(map, Car::Middle, 49.5, 50);
 
     h.onMessage([&map, &car](uWS::WebSocket<uWS::SERVER> ws, char *data,
                              size_t length, uWS::OpCode opCode) {

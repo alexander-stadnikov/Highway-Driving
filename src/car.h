@@ -21,7 +21,7 @@ public:
         std::vector<double> y;
     };
 
-    Car(const Map &map, Lane lane, double ref_v);
+    Car(const Map &map, Lane lane, double ref_v, int max_path);
 
     void update(const nlohmann::json &json);
     PlannedPath path();
@@ -39,4 +39,6 @@ private:
     double m_d;
     double m_yaw;
     double m_speed;
+    int m_prev_path_size{0};
+    const int m_max_path;
 };
