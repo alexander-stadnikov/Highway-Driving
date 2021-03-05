@@ -6,6 +6,30 @@
 #include <fstream>
 #include <sstream>
 
+#include "json.hpp"
+
+class CarState
+{
+public:
+    CarState(const nlohmann::json &json)
+        : x(json[1]["x"]),
+          y(json[1]["y"]),
+          s(json[1]["s"]),
+          d(json[1]["d"]),
+          yaw(json[1]["yaw"]),
+          speed(json[1]["speed"])
+    {
+    }
+
+private:
+    double x;
+    double y;
+    double s;
+    double d;
+    double yaw;
+    double speed;
+};
+
 struct Waypoint
 {
     double x;
