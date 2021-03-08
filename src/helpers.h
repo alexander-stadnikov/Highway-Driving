@@ -7,6 +7,8 @@
 
 #include "json.hpp"
 
+#include "Route.h"
+
 class SensorFusion
 {
 public:
@@ -41,40 +43,6 @@ public:
 
 private:
     nlohmann::json::const_reference &m_data;
-};
-
-struct Waypoint
-{
-    double x;
-    double y;
-    double s;
-    double dx;
-    double dy;
-
-    explicit Waypoint(const std::string &data)
-    {
-        std::istringstream iss(data);
-        iss >> x;
-        iss >> y;
-        iss >> s;
-        iss >> dx;
-        iss >> dy;
-    }
-};
-struct Route
-{
-    std::vector<Waypoint> waypoints;
-
-    explicit Route(const std::string &csv)
-    {
-        std::ifstream in(csv.c_str(), std::ifstream::in);
-        std::string line;
-
-        while (getline(in, line))
-        {
-            waypoints.push_back(Waypoint(line));
-        }
-    }
 };
 
 // Checks if the SocketIO event has JSON data.
