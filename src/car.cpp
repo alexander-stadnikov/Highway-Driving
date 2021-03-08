@@ -17,7 +17,7 @@ Car::PlannedPath Car::path()
     for (int i = 0; i < m_max_path; ++i)
     {
         const auto next_s = m_s + (i + 1) * dist_inc;
-        const auto next_xy = getXY(next_s, m_lane, m_route);
+        const auto next_xy = m_route.getXY(next_s, m_lane);
         path.x.push_back(next_xy[0]);
         path.y.push_back(next_xy[1]);
     }

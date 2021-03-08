@@ -3,20 +3,27 @@
 #include <string>
 #include <vector>
 
-struct Waypoint
+class Route
 {
-    double x;
-    double y;
-    double s;
-    double dx;
-    double dy;
-
-    explicit Waypoint(const std::string &data);
-};
-
-struct Route
-{
-    std::vector<Waypoint> waypoints;
-
+public:
     explicit Route(const std::string &csv);
+
+    std::vector<double> getXY(double s, double d) const;
+
+private:
+    struct Waypoint
+    {
+        double x{0.0};
+        double y{0.0};
+        double s{0.0};
+        double dx{0.0};
+        double dy{0.0};
+
+        Waypoint();
+        explicit Waypoint(const std::string &);
+
+        static bool lessByS(const Waypoint &, const Waypoint &);
+    };
+
+    std::vector<Waypoint> m_waypoints;
 };
