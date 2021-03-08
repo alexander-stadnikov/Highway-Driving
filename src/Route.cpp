@@ -37,10 +37,10 @@ Route::Route(const std::string &csv)
     }
 }
 
-std::vector<double> Route::getXY(double s, double d) const
+Cartesian2D Route::toCartesian(const Frenet2D &f) const
 {
     Waypoint w;
-    w.s = s;
+    w.s = f.s;
     auto nextWp = std::upper_bound(m_waypoints.cbegin(), m_waypoints.cend(), w, Waypoint::lessByS);
     auto wp = m_waypoints.cend() - 1;
     if (nextWp == m_waypoints.cend())
@@ -53,12 +53,12 @@ std::vector<double> Route::getXY(double s, double d) const
     }
 
     const double heading = atan2(nextWp->y - wp->y, nextWp->x - wp->x);
-    const double segmentS = s - wp->s;
+    const double segmentS = f.s - wp->s;
     const double segmentX = wp->x + segmentS * cos(heading);
     const double segmentY = wp->y + segmentS * sin(heading);
     const double orthogonalHeading = heading - M_PI / 2;
-    const double x = segmentX + d * cos(orthogonalHeading);
-    const double y = segmentY + d * sin(orthogonalHeading);
+    const double x = segmentX + f.d * cos(orthogonalHeading);
+    const double y = segmentY + f.d * sin(orthogonalHeading);
 
     return {x, y};
 }

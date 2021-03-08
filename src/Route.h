@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 
+#include "Cartesian2D.h"
+#include "Frenet2D.h"
+
 namespace udacity
 {
     class Route
@@ -10,7 +13,7 @@ namespace udacity
     public:
         explicit Route(const std::string &csv);
 
-        std::vector<double> getXY(double s, double d) const;
+        Cartesian2D toCartesian(const Frenet2D &) const;
 
     private:
         struct Waypoint
