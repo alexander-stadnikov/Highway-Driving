@@ -2,8 +2,8 @@
 #include "path.h"
 #include "helpers.h"
 
-Car::Car(const Map &map, Lane lane, double ref_v, int max_path)
-    : m_map(map),
+Car::Car(const Route &route, Lane lane, double ref_v, int max_path)
+    : m_route(route),
       m_lane(lane),
       m_ref_v(ref_v),
       m_max_path(max_path)
@@ -17,7 +17,7 @@ Car::PlannedPath Car::path()
     for (int i = 0; i < m_max_path; ++i)
     {
         const auto next_s = m_s + (i + 1) * dist_inc;
-        const auto next_xy = getXY(next_s, m_lane, m_map);
+        const auto next_xy = getXY(next_s, m_lane, m_route);
         path.x.push_back(next_xy[0]);
         path.y.push_back(next_xy[1]);
     }

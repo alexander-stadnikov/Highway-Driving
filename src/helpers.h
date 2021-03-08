@@ -61,11 +61,11 @@ struct Waypoint
         iss >> dy;
     }
 };
-struct Map
+struct Route
 {
     std::vector<Waypoint> waypoints;
 
-    explicit Map(const std::string &csv)
+    explicit Route(const std::string &csv)
     {
         std::ifstream in(csv.c_str(), std::ifstream::in);
         std::string line;
@@ -110,4 +110,4 @@ std::vector<double> getFrenet(double x, double y, double theta,
                               const std::vector<double> &maps_y);
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
-std::vector<double> getXY(double s, double d, const Map &map);
+std::vector<double> getXY(double s, double d, const Route &);

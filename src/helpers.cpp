@@ -133,18 +133,18 @@ std::vector<double> getFrenet(double x, double y, double theta,
 }
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
-std::vector<double> getXY(double s, double d, const Map &map)
+std::vector<double> getXY(double s, double d, const Route &route)
 {
     int prev_wp_id = -1;
-    const auto map_size = map.waypoints.size();
+    const auto map_size = route.waypoints.size();
 
-    while (s > map.waypoints[prev_wp_id + 1].s && (prev_wp_id < static_cast<int>(map_size - 1)))
+    while (s > route.waypoints[prev_wp_id + 1].s && (prev_wp_id < static_cast<int>(map_size - 1)))
     {
         ++prev_wp_id;
     }
 
-    const auto &wp2 = map.waypoints[(prev_wp_id + 1) % map_size];
-    const auto &prev_wp = map.waypoints[prev_wp_id];
+    const auto &wp2 = route.waypoints[(prev_wp_id + 1) % map_size];
+    const auto &prev_wp = route.waypoints[prev_wp_id];
     double heading = atan2(wp2.y - prev_wp.y, wp2.x - prev_wp.x);
 
     // the x,y,s along the segment
