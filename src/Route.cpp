@@ -26,6 +26,10 @@ bool Route::Waypoint::lessByS(const Waypoint &lhs, const Waypoint &rhs)
     return std::isless(lhs.s, rhs.s);
 }
 
+Route::Route()
+{
+}
+
 Route::Route(const std::string &csv)
 {
     std::ifstream in(csv.c_str(), std::ifstream::in);
@@ -35,6 +39,17 @@ Route::Route(const std::string &csv)
     {
         m_waypoints.push_back(Waypoint(line));
     }
+}
+
+Route::Route(const Route &other)
+{
+    *this = other;
+}
+
+Route &Route::operator=(const Route &other)
+{
+    m_waypoints = other.m_waypoints;
+    return *this;
 }
 
 Cartesian2D Route::toCartesian(const Frenet2D &f) const

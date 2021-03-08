@@ -21,16 +21,17 @@ public:
         std::vector<double> y;
     };
 
-    Car(const udacity::Route &, Lane, double ref_v, int max_path);
+    Car(Lane, double ref_v, int max_path);
 
     void update(const nlohmann::json &json);
     PlannedPath path();
+
+    void setRoute(const udacity::Route &);
 
 private:
     void setPosition(const nlohmann::json &json);
     void setSpeed(const nlohmann::json &json);
 
-    const udacity::Route &m_route;
     Lane m_lane;
     double m_ref_v;
     double m_x;
@@ -41,4 +42,5 @@ private:
     double m_speed;
     int m_prev_path_size{0};
     const int m_max_path;
+    udacity::Route m_route;
 };

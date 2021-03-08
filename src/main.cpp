@@ -19,7 +19,8 @@ int main()
     uWS::Hub h;
     udacity::Route route("../data/highway_map.csv");
     double max_s = 6945.554;
-    Car car(route, Car::Middle, 49.5, 50);
+    Car car(Car::Middle, 49.5, 50);
+    car.setRoute(route);
 
     h.onMessage([&route, &car](uWS::WebSocket<uWS::SERVER> ws, char *data,
                                size_t length, uWS::OpCode opCode) {

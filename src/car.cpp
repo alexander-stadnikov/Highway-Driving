@@ -4,9 +4,8 @@
 
 using namespace udacity;
 
-Car::Car(const Route &route, Lane lane, double ref_v, int max_path)
-    : m_route(route),
-      m_lane(lane),
+Car::Car(Lane lane, double ref_v, int max_path)
+    : m_lane(lane),
       m_ref_v(ref_v),
       m_max_path(max_path)
 {
@@ -48,4 +47,9 @@ void Car::setPosition(const nlohmann::json &json)
 void Car::setSpeed(const nlohmann::json &json)
 {
     m_speed = json[1]["speed"];
+}
+
+void Car::setRoute(const udacity::Route &route)
+{
+    m_route = route;
 }

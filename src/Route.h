@@ -8,10 +8,14 @@
 
 namespace udacity
 {
-    class Route
+    class Route final
     {
     public:
+        Route();
         explicit Route(const std::string &csv);
+        Route(const Route &);
+
+        Route &operator=(const Route &);
 
         Cartesian2D toCartesian(const Frenet2D &) const;
 
