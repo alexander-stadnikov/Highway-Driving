@@ -2,6 +2,8 @@
 #include "path.h"
 #include "helpers.h"
 
+using namespace udacity;
+
 Car::Car(const Route &route, Lane lane, double ref_v, int max_path)
     : m_route(route),
       m_lane(lane),

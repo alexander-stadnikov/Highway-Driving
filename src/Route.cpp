@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cmath>
 
+using namespace udacity;
+
 Route::Waypoint::Waypoint()
 {
 }
