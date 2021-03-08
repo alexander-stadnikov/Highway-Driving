@@ -1,4 +1,4 @@
-#include "car.h"
+#include "Car.h"
 #include "path.h"
 #include "helpers.h"
 
@@ -49,7 +49,7 @@ void Car::setSpeed(const nlohmann::json &json)
     m_speed = json[1]["speed"];
 }
 
-void Car::setRoute(const udacity::Route &route)
+void Car::setRoute(const Route &route)
 {
     m_route = route;
 }

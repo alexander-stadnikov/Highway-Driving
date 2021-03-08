@@ -9,7 +9,7 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
 set(sources
         src/main.cpp
-        src/car.cpp
+        src/Car.cpp
         src/helpers.cpp
         src/path.cpp
         src/Route.cpp)
