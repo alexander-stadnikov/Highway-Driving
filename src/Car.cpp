@@ -16,7 +16,7 @@ Car::PlannedPath Car::path()
     double dist_inc = 0.5;
     for (int i = 0; i < m_max_path; ++i)
     {
-        auto next_s = m_telemetry.frenet.s + (i + 1) * dist_inc;
+        auto next_s = m_telemetry->frenet.s + (i + 1) * dist_inc;
         const auto next_xy = m_route.toCartesian({next_s, static_cast<double>(m_lane)});
         path.x.push_back(next_xy.x);
         path.y.push_back(next_xy.y);
@@ -25,7 +25,7 @@ Car::PlannedPath Car::path()
     return path;
 }
 
-void Car::update(const Telemetry &tm)
+void Car::update(const std::shared_ptr<Telemetry> &tm)
 {
     m_telemetry = tm;
 }

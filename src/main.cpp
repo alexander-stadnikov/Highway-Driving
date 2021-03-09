@@ -15,6 +15,7 @@
 
 void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode,
                     const udacity::Route &route, udacity::Car &car);
+std::shared_ptr<udacity::Telemetry> createTelemetry(const nlohmann::json &);
 
 int main()
 {
@@ -70,16 +71,7 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
 
             if (event == "telemetry")
             {
-                udacity::Telemetry tm;
-                tm.cartesian.x = j[1]["x"];
-                tm.cartesian.y = j[1]["y"];
-                tm.frenet.s = j[1]["s"];
-                tm.frenet.d = j[1]["d"];
-                tm.yaw = j[1]["yaw"];
-                tm.speed = j[1]["speed"];
-
-                car.update(tm);
-
+                car.update(createTelemetry(j));
                 SensorFusion sensorFusion(j);
                 nlohmann::json outMsg;
                 const auto plannedPath = car.path();
@@ -96,4 +88,27 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
             ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
     }
+}
+
+std::shared_ptr<udacity::Telemetry> createTelemetry(const nlohmann::json &j)
+{
+    auto tm = std::make_shared<udacity::Telemetry>();
+    tm->cartesian.x = j[1]["x"];
+    tm->cartesian.y = j[1]["y"];
+    tm->frenet.s = j[1]["s"];
+    tm->frenet.d = j[1]["d"];
+    tm->yaw = j[1]["yaw"];
+    tm->speed = j[1]["speed"];
+
+    std::vector<double> x = j[1]["previous_path_x"];
+    std::vector<double> y = j[1]["previous_path_y"];
+
+    tm->previousPath.waypoints.resize(x.size());
+    for (size_t i = 0; i < x.size(); ++i)
+    {
+        tm->previousPath.waypoints[i].x = x[i];
+        tm->previousPath.waypoints[i].y = y[i];
+    }
+
+    return tm;
 }

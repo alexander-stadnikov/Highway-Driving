@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "json.hpp"
 
@@ -26,14 +27,14 @@ namespace udacity
 
         Car(Lane, int max_path);
 
-        void update(const Telemetry &);
+        void update(const std::shared_ptr<Telemetry> &);
         PlannedPath path();
 
         void setRoute(const Route &);
 
     private:
         Lane m_lane;
-        Telemetry m_telemetry;
+        std::shared_ptr<Telemetry> m_telemetry;
         int m_prev_path_size{0};
         const int m_max_path;
         Route m_route;
