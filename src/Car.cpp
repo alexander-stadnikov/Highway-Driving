@@ -16,7 +16,7 @@ Car::PlannedPath Car::path()
     double dist_inc = 0.5;
     for (int i = 0; i < m_max_path; ++i)
     {
-        auto next_s = m_s + (i + 1) * dist_inc;
+        auto next_s = m_telemetry.frenet.s + (i + 1) * dist_inc;
         const auto next_xy = m_route.toCartesian({next_s, static_cast<double>(m_lane)});
         path.x.push_back(next_xy.x);
         path.y.push_back(next_xy.y);
@@ -25,27 +25,9 @@ Car::PlannedPath Car::path()
     return path;
 }
 
-void Car::update(const nlohmann::json &json)
+void Car::update(const Telemetry &tm)
 {
-    setPosition(json);
-    setSpeed(json);
-}
-
-void Car::setPosition(const nlohmann::json &json)
-{
-    m_x = json[1]["x"];
-    m_y = json[1]["y"];
-    m_s = json[1]["s"];
-    m_d = json[1]["d"];
-    m_yaw = json[1]["yaw"];
-
-    Path path(json);
-    m_prev_path_size = path.x.size();
-}
-
-void Car::setSpeed(const nlohmann::json &json)
-{
-    m_speed = json[1]["speed"];
+    m_telemetry = tm;
 }
 
 void Car::setRoute(const Route &route)

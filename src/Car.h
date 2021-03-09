@@ -5,6 +5,7 @@
 #include "json.hpp"
 
 #include "helpers.h"
+#include "Telemetry.h"
 
 namespace udacity
 {
@@ -25,22 +26,14 @@ namespace udacity
 
         Car(Lane, int max_path);
 
-        void update(const nlohmann::json &json);
+        void update(const Telemetry &);
         PlannedPath path();
 
         void setRoute(const Route &);
 
     private:
-        void setPosition(const nlohmann::json &json);
-        void setSpeed(const nlohmann::json &json);
-
         Lane m_lane;
-        double m_x;
-        double m_y;
-        double m_s;
-        double m_d;
-        double m_yaw;
-        double m_speed;
+        Telemetry m_telemetry;
         int m_prev_path_size{0};
         const int m_max_path;
         Route m_route;

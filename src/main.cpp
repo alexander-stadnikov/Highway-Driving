@@ -10,6 +10,8 @@
 
 #include "helpers.h"
 #include "Car.h"
+#include "Route.h"
+#include "Telemetry.h"
 
 void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode,
                     const udacity::Route &route, udacity::Car &car);
@@ -64,11 +66,20 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
         if (!s.empty())
         {
             auto j = nlohmann::json::parse(s);
-            car.update(j);
             std::string event = j[0].get<std::string>();
 
             if (event == "telemetry")
             {
+                udacity::Telemetry tm;
+                tm.cartesian.x = j[1]["x"];
+                tm.cartesian.y = j[1]["y"];
+                tm.frenet.s = j[1]["s"];
+                tm.frenet.d = j[1]["d"];
+                tm.yaw = j[1]["yaw"];
+                tm.speed = j[1]["speed"];
+
+                car.update(tm);
+
                 SensorFusion sensorFusion(j);
                 nlohmann::json outMsg;
                 const auto plannedPath = car.path();
