@@ -7,6 +7,7 @@
 
 #include "helpers.h"
 #include "Telemetry.h"
+#include "spline.h"
 
 namespace udacity
 {
@@ -25,18 +26,31 @@ namespace udacity
             std::vector<double> y;
         };
 
-        Car(Lane, int max_path);
+    public:
+        Car(Lane);
 
         void update(const std::shared_ptr<Telemetry> &);
-        PlannedPath path();
+        Path path() const;
 
         void setRoute(const Route &);
 
     private:
+        struct CarPosition
+        {
+            Cartesian2D pos;
+            double yaw;
+        };
+
+        void addIntermediatePoints(const std::vector<double> &points,
+                                   std::vector<double> &x, std::vector<double> &y) const;
+        std::shared_ptr<tk::spline> createSpline(const CarPosition &) const;
+        void convertFromGlobalToLocal(const CarPosition &, std::vector<double> &x,
+                                      std::vector<double> &y) const;
+        Path interpolatePath(const CarPosition &, const std::shared_ptr<tk::spline> &, int pathLength) const;
+
+    private:
         Lane m_lane;
         std::shared_ptr<Telemetry> m_telemetry;
-        int m_prev_path_size{0};
-        const int m_max_path;
         Route m_route;
     };
 }

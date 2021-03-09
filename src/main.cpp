@@ -20,9 +20,10 @@ std::shared_ptr<udacity::Telemetry> createTelemetry(const nlohmann::json &);
 int main()
 {
     uWS::Hub h;
-    udacity::Route route("../data/highway_map.csv", 49.5);
+    udacity::Route route("../data/highway_map.csv");
+    route.setMaxSpeedMph(49.5);
     double max_s = 6945.554;
-    udacity::Car car(udacity::Car::Middle, 50);
+    udacity::Car car(udacity::Car::Middle);
     car.setRoute(route);
 
     h.onMessage([&route, &car](uWS::WebSocket<uWS::SERVER> ws, char *data,
@@ -74,9 +75,9 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
                 car.update(createTelemetry(j));
                 SensorFusion sensorFusion(j);
                 nlohmann::json outMsg;
-                const auto plannedPath = car.path();
-                outMsg["next_x"] = plannedPath.x;
-                outMsg["next_y"] = plannedPath.y;
+                auto path = car.path().decompose();
+                outMsg["next_x"] = std::get<0>(path);
+                outMsg["next_y"] = std::get<1>(path);
                 auto msg = "42[\"control\"," + outMsg.dump() + "]";
 
                 ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
