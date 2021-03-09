@@ -32,7 +32,7 @@ namespace udacity
         void update(const std::shared_ptr<Telemetry> &);
         Path path() const;
 
-        void setRoute(const Route &);
+        void setRoute(const std::shared_ptr<Route> &);
 
     private:
         struct CarPosition
@@ -51,6 +51,6 @@ namespace udacity
     private:
         Lane m_lane;
         std::shared_ptr<Telemetry> m_telemetry;
-        Route m_route;
+        std::shared_ptr<Route> m_route;
     };
 }

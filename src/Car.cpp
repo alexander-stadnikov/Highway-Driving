@@ -32,7 +32,7 @@ void Car::update(const std::shared_ptr<Telemetry> &tm)
     m_telemetry = tm;
 }
 
-void Car::setRoute(const Route &route)
+void Car::setRoute(const std::shared_ptr<Route> &route)
 {
     m_route = route;
 }
@@ -42,8 +42,8 @@ void Car::addIntermediatePoints(const std::vector<double> &points,
 {
     for (const auto p : points)
     {
-        const auto wp = m_route.toCartesian({m_telemetry->frenet.s + p,
-                                             static_cast<double>(m_lane)});
+        const auto wp = m_route->toCartesian({m_telemetry->frenet.s + p,
+                                              static_cast<double>(m_lane)});
         x.push_back(wp.x);
         y.push_back(wp.y);
     }
@@ -102,7 +102,7 @@ Path Car::interpolatePath(const CarPosition &carPosition, const std::shared_ptr<
     const double targetY = (*spline)(targetX);
     const double dst = std::sqrt(targetX * targetX + targetY * targetY);
     double xAddOn = 0.0;
-    const double N = dst / (0.02 * m_route.maxSpeed());
+    const double N = dst / (0.02 * m_route->maxSpeed());
     const double dx = targetX / N;
     const double sinYaw = std::sin(carPosition.yaw);
     const double cosYaw = std::cos(carPosition.yaw);
