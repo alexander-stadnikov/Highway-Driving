@@ -20,17 +20,14 @@ namespace udacity
             Middle = 6,
             Right = 10
         };
-        struct PlannedPath
-        {
-            std::vector<double> x;
-            std::vector<double> y;
-        };
+
+        using Trajectory = std::tuple<std::vector<double>, std::vector<double>>;
 
     public:
         Car(Lane);
 
         void update(const std::shared_ptr<Telemetry> &);
-        Path path() const;
+        Trajectory path() const;
 
         void setRoute(const std::shared_ptr<Route> &);
 
@@ -46,7 +43,8 @@ namespace udacity
         std::shared_ptr<tk::spline> createSpline(const CarPosition &) const;
         void convertFromGlobalToLocal(const CarPosition &, std::vector<double> &x,
                                       std::vector<double> &y) const;
-        Path interpolatePath(const CarPosition &, const std::shared_ptr<tk::spline> &, int pathLength) const;
+        Car::Trajectory interpolatePath(const CarPosition &,
+                                        const std::shared_ptr<tk::spline> &, int pathLength) const;
 
     private:
         Lane m_lane;

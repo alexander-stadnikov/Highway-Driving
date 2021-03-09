@@ -9,7 +9,7 @@ Car::Car(Lane lane)
 {
 }
 
-Path Car::path() const
+Car::Trajectory Car::path() const
 {
     const int previousPathSize = m_telemetry->previousPath.waypoints.size();
     CarPosition carPosition{{m_telemetry->cartesian.x, m_telemetry->cartesian.y},
@@ -93,34 +93,37 @@ void Car::convertFromGlobalToLocal(const CarPosition &carPos, std::vector<double
     }
 }
 
-Path Car::interpolatePath(const CarPosition &carPosition, const std::shared_ptr<tk::spline> &spline,
-                          int pathLength) const
+Car::Trajectory Car::interpolatePath(const CarPosition &carPosition,
+                                     const std::shared_ptr<tk::spline> &spline,
+                                     int pathLength) const
 {
-    Path nextPath = m_telemetry->previousPath;
-
     const double targetX = 30.0;
     const double targetY = (*spline)(targetX);
     const double dst = std::sqrt(targetX * targetX + targetY * targetY);
-    double xAddOn = 0.0;
     const double N = dst / (0.02 * m_route->maxSpeed());
     const double dx = targetX / N;
     const double sinYaw = std::sin(carPosition.yaw);
     const double cosYaw = std::cos(carPosition.yaw);
-    const int previousPathSize = m_telemetry->previousPath.waypoints.size();
+    const int previousPathLength = m_telemetry->previousPath.waypoints.size();
 
-    for (int i = 1; i <= pathLength - previousPathSize; i++)
+    std::vector<double> trajectoryX(pathLength);
+    std::vector<double> trajectoryY(pathLength);
+
+    for (int i = 0; i < previousPathLength; i++)
     {
-        xAddOn += dx;
-
-        double x = xAddOn;
-        double y = (*spline)(x);
-        const double X = x;
-        const double Y = y;
-
-        x = carPosition.pos.x + X * cosYaw - Y * sinYaw;
-        y = carPosition.pos.y + X * sinYaw + Y * cosYaw;
-        nextPath.waypoints.push_back({x, y});
+        trajectoryX[i] = m_telemetry->previousPath.waypoints[i].x;
+        trajectoryY[i] = m_telemetry->previousPath.waypoints[i].y;
     }
 
-    return nextPath;
+    double x = 0.0;
+    for (int i = previousPathLength; i < pathLength; i++)
+    {
+        x += dx;
+        double y = (*spline)(x);
+
+        trajectoryX[i] = carPosition.pos.x + x * cosYaw - y * sinYaw;
+        trajectoryY[i] = carPosition.pos.y + x * sinYaw + y * cosYaw;
+    }
+
+    return {trajectoryX, trajectoryY};
 }

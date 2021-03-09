@@ -73,9 +73,7 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                 car.update(createTelemetry(j));
                 SensorFusion sensorFusion(j);
                 nlohmann::json outMsg;
-                auto path = car.path().decompose();
-                outMsg["next_x"] = std::get<0>(path);
-                outMsg["next_y"] = std::get<1>(path);
+                std::tie(outMsg["next_x"], outMsg["next_y"]) = car.path();
                 auto msg = "42[\"control\"," + outMsg.dump() + "]";
 
                 ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
