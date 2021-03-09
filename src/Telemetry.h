@@ -10,10 +10,8 @@ namespace udacity
     {
         Cartesian2D cartesian;
         Frenet2D frenet;
-        double yaw{0.0};
-        double speed{0.0};
+        double yaw;
+        double speed;
         Path previousPath;
-
-        Telemetry() {}
     };
 }

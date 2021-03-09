@@ -94,10 +94,8 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, u
 std::shared_ptr<udacity::Telemetry> createTelemetry(const nlohmann::json &j)
 {
     auto tm = std::make_shared<udacity::Telemetry>();
-    tm->cartesian.x = j[1]["x"];
-    tm->cartesian.y = j[1]["y"];
-    tm->frenet.s = j[1]["s"];
-    tm->frenet.d = j[1]["d"];
+    tm->cartesian = {j[1]["x"], j[1]["y"]};
+    tm->frenet = {j[1]["s"], j[1]["d"]};
     tm->yaw = j[1]["yaw"];
     tm->speed = j[1]["speed"];
 
