@@ -12,12 +12,14 @@ namespace udacity
     {
     public:
         Route();
-        explicit Route(const std::string &csv, double maxSpeed);
+        explicit Route(const std::string &csv);
         Route(const Route &);
 
         Route &operator=(const Route &);
 
         Cartesian2D toCartesian(const Frenet2D &) const;
+        void setMaxSpeedMph(const double maxMph);
+        double maxSpeed() const;
 
     private:
         struct Waypoint
@@ -35,6 +37,6 @@ namespace udacity
         };
 
         std::vector<Waypoint> m_waypoints;
-        double m_maxSpeed;
+        double m_maxSpeed{0.0};
     };
 }

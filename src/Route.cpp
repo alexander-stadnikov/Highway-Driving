@@ -30,8 +30,7 @@ Route::Route()
 {
 }
 
-Route::Route(const std::string &csv, double maxSpeed)
-    : m_maxSpeed(maxSpeed)
+Route::Route(const std::string &csv)
 {
     std::ifstream in(csv.c_str(), std::ifstream::in);
     std::string line;
@@ -50,6 +49,7 @@ Route::Route(const Route &other)
 Route &Route::operator=(const Route &other)
 {
     m_waypoints = other.m_waypoints;
+    m_maxSpeed = other.m_maxSpeed;
     return *this;
 }
 
@@ -77,4 +77,14 @@ Cartesian2D Route::toCartesian(const Frenet2D &f) const
     const double y = segmentY + f.d * sin(orthogonalHeading);
 
     return {x, y};
+}
+
+double Route::maxSpeed() const
+{
+    return m_maxSpeed;
+}
+
+void Route::setMaxSpeedMph(const double maxMph)
+{
+    m_maxSpeed = maxMph / 2.24;
 }
