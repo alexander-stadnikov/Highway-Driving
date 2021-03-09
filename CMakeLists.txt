@@ -11,7 +11,6 @@ set(sources
         src/main.cpp
         src/Car.cpp
         src/helpers.cpp
-        src/path.cpp
         src/Route.cpp)
 
 
