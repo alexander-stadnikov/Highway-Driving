@@ -23,7 +23,7 @@ namespace udacity
             std::vector<double> y;
         };
 
-        Car(Lane, double ref_v, int max_path);
+        Car(Lane, int max_path);
 
         void update(const nlohmann::json &json);
         PlannedPath path();
@@ -35,7 +35,6 @@ namespace udacity
         void setSpeed(const nlohmann::json &json);
 
         Lane m_lane;
-        double m_ref_v;
         double m_x;
         double m_y;
         double m_s;

@@ -4,9 +4,8 @@
 
 using namespace udacity;
 
-Car::Car(Lane lane, double ref_v, int max_path)
+Car::Car(Lane lane, int max_path)
     : m_lane(lane),
-      m_ref_v(ref_v),
       m_max_path(max_path)
 {
 }

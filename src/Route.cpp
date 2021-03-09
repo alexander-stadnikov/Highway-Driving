@@ -30,7 +30,8 @@ Route::Route()
 {
 }
 
-Route::Route(const std::string &csv)
+Route::Route(const std::string &csv, double maxSpeed)
+    : m_maxSpeed(maxSpeed)
 {
     std::ifstream in(csv.c_str(), std::ifstream::in);
     std::string line;

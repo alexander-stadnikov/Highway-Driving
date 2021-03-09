@@ -12,7 +12,7 @@ namespace udacity
     {
     public:
         Route();
-        explicit Route(const std::string &csv);
+        explicit Route(const std::string &csv, double maxSpeed);
         Route(const Route &);
 
         Route &operator=(const Route &);
@@ -35,5 +35,6 @@ namespace udacity
         };
 
         std::vector<Waypoint> m_waypoints;
+        double m_maxSpeed;
     };
 }

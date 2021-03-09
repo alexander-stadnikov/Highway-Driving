@@ -17,9 +17,9 @@ void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode,
 int main()
 {
     uWS::Hub h;
-    udacity::Route route("../data/highway_map.csv");
+    udacity::Route route("../data/highway_map.csv", 49.5);
     double max_s = 6945.554;
-    udacity::Car car(udacity::Car::Middle, 49.5, 50);
+    udacity::Car car(udacity::Car::Middle, 50);
     car.setRoute(route);
 
     h.onMessage([&route, &car](uWS::WebSocket<uWS::SERVER> ws, char *data,
