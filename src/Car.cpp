@@ -4,8 +4,7 @@
 
 using namespace udacity;
 
-Car::Car(size_t initialLane)
-    : m_lane(initialLane)
+Car::Car()
 {
 }
 
@@ -126,4 +125,9 @@ Car::Trajectory Car::interpolatePath(const CarPosition &carPosition,
     }
 
     return {trajectoryX, trajectoryY};
+}
+
+void Car::setLane(size_t lane) noexcept
+{
+    m_lane = lane;
 }

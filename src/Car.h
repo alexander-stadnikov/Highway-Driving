@@ -17,12 +17,13 @@ namespace udacity
         using Trajectory = std::tuple<std::vector<double>, std::vector<double>>;
 
     public:
-        Car(size_t initialLane);
+        Car();
 
         void update(const std::shared_ptr<Telemetry> &);
         Trajectory path() const;
 
         void setRoute(const std::shared_ptr<Route> &);
+        void setLane(size_t lane) noexcept;
 
     private:
         struct CarPosition

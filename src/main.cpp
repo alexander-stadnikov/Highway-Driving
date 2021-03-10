@@ -23,7 +23,8 @@ int main()
     route->setMaxSpeedMph(49.5);
     route->setNumberOfLanes(3);
 
-    udacity::Car car(1);
+    udacity::Car car;
+    car.setLane(1);
     car.setRoute(route);
 
     h.onMessage([&car](uWS::WebSocket<uWS::SERVER> ws, char *data,
