@@ -5,6 +5,12 @@
 using namespace udacity;
 
 Car::Car()
+    : m_state(State::Accelerate),
+      m_fsm({{State::Accelerate, {State::Accelerate, State::KeepLane}},
+             {State::KeepLane, {State::KeepLane, State::ChangeLeft, State::ChangeRight}},
+             {State::ChangeLeft, {State::KeepLane, State::ChangeLeft}},
+             {State::KeepLane, {State::KeepLane, State::ChangeRight}},
+             {State::Brake, {State::Brake, State::Accelerate}}})
 {
 }
 

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 #include "json.hpp"
 
@@ -32,6 +33,15 @@ namespace udacity
             double yaw;
         };
 
+        enum class State
+        {
+            Accelerate,
+            Brake,
+            KeepLane,
+            ChangeLeft,
+            ChangeRight
+        };
+
         void addIntermediatePoints(const std::vector<double> &points,
                                    std::vector<double> &x, std::vector<double> &y) const;
         std::shared_ptr<tk::spline> createSpline(const CarPosition &) const;
@@ -44,5 +54,7 @@ namespace udacity
         size_t m_lane;
         std::shared_ptr<Telemetry> m_telemetry;
         std::shared_ptr<Route> m_route;
+        State m_state;
+        const std::unordered_map<State, std::vector<State>> m_fsm;
     };
 }
