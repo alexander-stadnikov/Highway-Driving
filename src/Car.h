@@ -47,9 +47,13 @@ namespace udacity
             size_t lane;
             double speed;
             State state;
+            double cost;
 
             explicit Behaviour(State, size_t currentLane, double currentSpeed,
-                std::shared_ptr<Route>& route);
+                               std::shared_ptr<Route> &route);
+
+        private:
+            double currentCost(double currentSpeed) noexcept;
         };
 
     private:
@@ -60,9 +64,11 @@ namespace udacity
                                       std::vector<double> &y) const;
         Car::Trajectory interpolatePath(const CarPosition &,
                                         const std::shared_ptr<tk::spline> &, int pathLength) const;
+        void updateFsm() noexcept;
 
     private:
         size_t m_lane;
+        double m_speed;
         std::shared_ptr<Telemetry> m_telemetry;
         std::shared_ptr<Route> m_route;
         State m_state;
