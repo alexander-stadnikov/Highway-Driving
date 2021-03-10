@@ -137,3 +137,36 @@ void Car::setLane(size_t lane) noexcept
 {
     m_lane = lane;
 }
+
+Car::Behaviour::Behaviour(State s, size_t currentLane, double currentSpeed,
+                          std::shared_ptr<Route> &route)
+{
+    state = s;
+    switch (state)
+    {
+    case State::Accelerate:
+        lane = currentLane;
+        speed = 9;
+        break;
+
+    case State::KeepLane:
+        lane = currentLane;
+        speed = route->maxSpeed();
+        break;
+
+    case State::ChangeLeft:
+        speed = route->maxSpeed();
+        lane = route->laneToLeft(currentLane);
+        break;
+
+    case State::ChangeRight:
+        speed = route->maxSpeed();
+        lane = route->laneToRight(currentLane);
+        break;
+
+    case State::Brake:
+        lane = currentLane;
+        speed = std::max(currentSpeed - 5.00, 0.0);
+        break;
+    }
+}

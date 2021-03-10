@@ -42,6 +42,17 @@ namespace udacity
             ChangeRight
         };
 
+        struct Behaviour
+        {
+            size_t lane;
+            double speed;
+            State state;
+
+            explicit Behaviour(State, size_t currentLane, double currentSpeed,
+                std::shared_ptr<Route>& route);
+        };
+
+    private:
         void addIntermediatePoints(const std::vector<double> &points,
                                    std::vector<double> &x, std::vector<double> &y) const;
         std::shared_ptr<tk::spline> createSpline(const CarPosition &) const;
