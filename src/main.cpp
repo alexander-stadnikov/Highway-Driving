@@ -20,8 +20,10 @@ int main()
 {
     uWS::Hub h;
     auto route = std::make_shared<udacity::Route>("../data/highway_map.csv");
-    udacity::Car car(udacity::Car::Middle);
     route->setMaxSpeedMph(49.5);
+    route->setNumberOfLanes(3);
+
+    udacity::Car car(1);
     car.setRoute(route);
 
     h.onMessage([&car](uWS::WebSocket<uWS::SERVER> ws, char *data,

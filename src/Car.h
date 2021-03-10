@@ -14,17 +14,10 @@ namespace udacity
     class Car
     {
     public:
-        enum Lane
-        {
-            Left = 2,
-            Middle = 6,
-            Right = 10
-        };
-
         using Trajectory = std::tuple<std::vector<double>, std::vector<double>>;
 
     public:
-        Car(Lane);
+        Car(size_t initialLane);
 
         void update(const std::shared_ptr<Telemetry> &);
         Trajectory path() const;
@@ -47,7 +40,7 @@ namespace udacity
                                         const std::shared_ptr<tk::spline> &, int pathLength) const;
 
     private:
-        Lane m_lane;
+        size_t m_lane;
         std::shared_ptr<Telemetry> m_telemetry;
         std::shared_ptr<Route> m_route;
     };

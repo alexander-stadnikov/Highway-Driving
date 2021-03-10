@@ -4,8 +4,8 @@
 
 using namespace udacity;
 
-Car::Car(Lane lane)
-    : m_lane(lane)
+Car::Car(size_t initialLane)
+    : m_lane(initialLane)
 {
 }
 
@@ -43,7 +43,7 @@ void Car::addIntermediatePoints(const std::vector<double> &points,
     for (const auto p : points)
     {
         const auto wp = m_route->toCartesian({m_telemetry->frenet.s + p,
-                                              static_cast<double>(m_lane)});
+                                              m_route->laneCenterToFrenet(m_lane)});
         x.push_back(wp.x);
         y.push_back(wp.y);
     }
