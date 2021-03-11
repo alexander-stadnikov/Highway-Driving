@@ -74,7 +74,7 @@ std::shared_ptr<tk::spline> Car::createSpline(const CarPosition &carPosition) co
         y.push_back(p1.y);
     }
 
-    addIntermediatePoints({30.0, 60.0, 90.0}, x, y);
+    addIntermediatePoints({60.0, 80.0, 100.0}, x, y);
     convertFromGlobalToLocal(carPosition, x, y);
     auto f = std::make_shared<tk::spline>();
     f->set_points(x, y);
@@ -99,7 +99,7 @@ Car::Trajectory Car::interpolatePath(const CarPosition &carPosition,
                                      const std::shared_ptr<tk::spline> &spline,
                                      int pathLength) const
 {
-    const double targetX = 30.0;
+    const double targetX = 60.0;
     const double targetY = (*spline)(targetX);
     const double dst = std::sqrt(targetX * targetX + targetY * targetY);
     const double N = dst / (0.02 * m_fsm.speed());
