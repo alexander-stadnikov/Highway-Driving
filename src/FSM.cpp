@@ -7,12 +7,6 @@
 
 namespace
 {
-    double accelerationPrice(double behaviourSpeed, double currentSpeed) noexcept
-    {
-        constexpr double Price = 10e4;
-        return std::isless(currentSpeed, behaviourSpeed) ? -Price : 5.0 * Price;
-    }
-
     double accelerate(double speed)
     {
         return speed + 1.5 * 0.224;
@@ -45,7 +39,7 @@ namespace
             {
             case State::KeepLane:
                 lane = currentLane;
-                speed = route->recommendedSpeed();
+                speed = route->maxSpeed();
                 break;
 
             case State::ChangeLeft:
@@ -63,7 +57,7 @@ namespace
     private:
         double currentCost(double currentSpeed) noexcept
         {
-            return accelerationPrice(speed, currentSpeed);
+            return cost;
         }
     };
 }
