@@ -2,24 +2,15 @@
 #include "Route.h"
 #include "Telemetry.h"
 
+#include <cmath>
+#include <iostream>
+
 namespace
 {
     double accelerationSpeed(double behaviourSpeed, double currentSpeed) noexcept
     {
         constexpr double Price = 10e4;
-        double cost = 0.0;
-        if (behaviourSpeed <= 10.0)
-        {
-            if (currentSpeed <= 10.0)
-            {
-                cost = -Price;
-            }
-            else
-            {
-                cost = 5.0 * Price;
-            }
-        }
-        return cost;
+        return std::isless(currentSpeed, behaviourSpeed) ? -Price : 5.0 * Price;
     }
 
     struct Behaviour
@@ -37,17 +28,20 @@ namespace
             const auto currentLane = route->frenetToLaneNumber(tm->frenet.d);
             const auto currentSpeed = tm->speed;
 
+            cost = 0.0;
+
             state = s;
             switch (state)
             {
             case State::Accelerate:
                 lane = currentLane;
-                speed = 9;
+                speed = 10.0;
+                cost = accelerationSpeed(speed, currentSpeed);
                 break;
 
             case State::KeepLane:
                 lane = currentLane;
-                speed = route->maxSpeed();
+                speed = route->maxSpeed() - 0.5;
                 break;
 
             case State::ChangeLeft:
@@ -65,14 +59,12 @@ namespace
                 speed = std::max(currentSpeed - 5.00, 0.0);
                 break;
             }
-
-            cost = currentCost(currentSpeed);
         }
 
     private:
         double currentCost(double currentSpeed) noexcept
         {
-            return accelerationSpeed(speed, currentSpeed);
+            return cost;
         }
     };
 }
@@ -116,13 +108,17 @@ namespace udacity
         switch (m_state)
         {
         case State::Accelerate:
-            m_speed += 0.2;
+            m_speed += 0.224;
             m_lane = currentLane;
+
+            std::cout << "Accelerate" << std::endl;
             break;
 
         case State::KeepLane:
-            m_speed = m_route->maxSpeed(); // TODO: Use adaptive speed
+            m_speed = std::min(m_speed + 0.224, m_route->maxSpeed() - 0.5); // TODO: Use adaptive speed
             m_lane = currentLane;
+
+            std::cout << "KeepLane" << std::endl;
             break;
 
         case State::ChangeLeft:
