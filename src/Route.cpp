@@ -8,6 +8,15 @@
 
 using namespace udacity;
 
+namespace
+{
+    template <typename T>
+    std::string msg(const std::string &m, T v)
+    {
+        return m + std::to_string(v);
+    }
+}
+
 Route::Waypoint::Waypoint() noexcept
 {
 }
@@ -100,17 +109,17 @@ size_t Route::frenetToLaneNumber(double d) const
     int intValue = static_cast<int>(d) / 4;
     if (intValue < 0 || intValue > m_numberOfLanes - 1)
     {
-        throw std::out_of_range("Unable to convert frenet into lane number");
+        throw std::out_of_range(msg("Unable to convert frenet into lane number: ", d));
     }
 
-    return d;
+    return intValue;
 }
 
 size_t Route::laneToLeft(size_t lane) const
 {
     if (lane == 0 || lane > m_numberOfLanes - 1)
     {
-        throw std::out_of_range("Unable to find the left line");
+        throw std::out_of_range(msg("Unable to find the left line: ", lane));
     }
     return lane - 1;
 }
@@ -119,7 +128,7 @@ size_t Route::laneToRight(size_t lane) const
 {
     if (lane >= m_numberOfLanes - 1)
     {
-        throw std::out_of_range("Unable to find the left line");
+        throw std::out_of_range(msg("Unable to find the left line: ", lane));
     }
     return lane - 1;
 }
@@ -128,7 +137,7 @@ double Route::laneCenterToFrenet(size_t lane) const
 {
     if (lane >= m_numberOfLanes)
     {
-        throw std::out_of_range("Unable to convert lane center to frenet");
+        throw std::out_of_range(msg("Unable to convert lane center to frenet: ", lane));
     }
 
     return static_cast<double>(lane * 4 + 2);
