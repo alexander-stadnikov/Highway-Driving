@@ -16,9 +16,15 @@ namespace udacity
     class SensorFusion
     {
     public:
+        static constexpr double Unlimited = 1e6;
+
+    public:
         explicit SensorFusion(const nlohmann::json &,
                               const std::shared_ptr<Route> &,
-                              const std::shared_ptr<Telemetry> &);
+                              const std::shared_ptr<Telemetry> &) noexcept;
+
+        double freeDistanceInFront(int lane) const noexcept;
+        double speedOfVehicleInFront(int lane) const noexcept;
 
     private:
         struct Vehicle
@@ -30,5 +36,6 @@ namespace udacity
         };
 
         std::unordered_map<int, Vehicle> m_vehicles;
+        const std::shared_ptr<Telemetry> m_tm;
     };
 }

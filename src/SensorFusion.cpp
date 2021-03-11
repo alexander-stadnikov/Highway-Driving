@@ -18,7 +18,8 @@ namespace udacity
 {
     SensorFusion::SensorFusion(const nlohmann::json &json,
                                const std::shared_ptr<Route> &route,
-                               const std::shared_ptr<Telemetry> &tm)
+                               const std::shared_ptr<Telemetry> &tm) noexcept
+        : m_tm(tm)
     {
         for (const auto &j : json[1]["sensor_fusion"])
         {
@@ -27,7 +28,7 @@ namespace udacity
                       {j[3], j[4]},
                       {j[5], j[6]}};
 
-            const auto NewDistance = tm->frenet.s - v.frenet.s;
+            const auto NewDistance = m_tm->frenet.s - v.frenet.s;
             auto lane = route->frenetToLaneNumber(v.frenet.d);
 
             if (lane < 0 || lane >= route->numberOfLanes())
@@ -46,7 +47,7 @@ namespace udacity
                 continue;
             }
 
-            const auto ExistingDistance = std::fabs(tm->frenet.s - m_vehicles[lane].frenet.s);
+            const auto ExistingDistance = std::fabs(m_tm->frenet.s - m_vehicles[lane].frenet.s);
             if (std::isless(std::fabs(NewDistance), ExistingDistance))
             {
                 m_vehicles[lane] = v;
@@ -66,5 +67,28 @@ namespace udacity
         //     std::cout << " -> " << it.second.id << " : " << std::fabs(tm->frenet.s - it.second.frenet.s) << std::endl;
         // }
         // std::cout << "-------------------------------------------" << std::endl;
+    }
+
+    double SensorFusion::freeDistanceInFront(int lane) const noexcept
+    {
+        lane = laneInFront(lane);
+        if (m_vehicles.count(lane) == 0)
+        {
+            return Unlimited;
+        }
+
+        return m_vehicles.at(lane).frenet.s - m_tm->frenet.s;
+    }
+
+    double SensorFusion::speedOfVehicleInFront(int lane) const noexcept
+    {
+        lane = laneInFront(lane);
+        if (m_vehicles.count(lane) == 0)
+        {
+            return Unlimited;
+        }
+
+        const auto &v = m_vehicles.at(lane).v;
+        return std::sqrt(std::pow(v.x, 2) + std::pow(v.y, 2));
     }
 }
