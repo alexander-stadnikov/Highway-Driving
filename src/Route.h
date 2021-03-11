@@ -24,6 +24,7 @@ namespace udacity
         double recommendedSpeed() const noexcept;
 
         void setNumberOfLanes(int numberOfLanes) noexcept;
+        int numberOfLanes() const noexcept;
         int frenetToLaneNumber(double d) const noexcept;
         double laneCenterToFrenet(int) const noexcept;
 

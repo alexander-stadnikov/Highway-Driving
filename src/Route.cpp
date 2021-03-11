@@ -108,3 +108,8 @@ double Route::recommendedSpeed() const noexcept
 {
     return maxSpeed() - 0.5;
 }
+
+int Route::numberOfLanes() const noexcept
+{
+    return m_numberOfLanes;
+}
