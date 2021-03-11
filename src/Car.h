@@ -2,13 +2,13 @@
 
 #include <vector>
 #include <memory>
-#include <unordered_map>
 
 #include "json.hpp"
 
 #include "helpers.h"
 #include "Telemetry.h"
 #include "spline.h"
+#include "FSM.h"
 
 namespace udacity
 {
@@ -33,29 +33,6 @@ namespace udacity
             double yaw;
         };
 
-        enum class State
-        {
-            Accelerate,
-            Brake,
-            KeepLane,
-            ChangeLeft,
-            ChangeRight
-        };
-
-        struct Behaviour
-        {
-            size_t lane;
-            double speed;
-            State state;
-            double cost;
-
-            explicit Behaviour(State, size_t currentLane, double currentSpeed,
-                               std::shared_ptr<Route> &route);
-
-        private:
-            double currentCost(double currentSpeed) noexcept;
-        };
-
     private:
         void addIntermediatePoints(const std::vector<double> &points,
                                    std::vector<double> &x, std::vector<double> &y) const;
@@ -64,13 +41,11 @@ namespace udacity
                                       std::vector<double> &y) const;
         Car::Trajectory interpolatePath(const CarPosition &,
                                         const std::shared_ptr<tk::spline> &, int pathLength) const;
-        void updateFsm() noexcept;
 
     private:
         size_t m_lane;
         std::shared_ptr<Telemetry> m_telemetry;
         std::shared_ptr<Route> m_route;
-        State m_state;
-        const std::unordered_map<State, std::vector<State>> m_fsm;
+        FSM m_fsm;
     };
 }
