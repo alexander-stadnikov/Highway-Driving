@@ -1,5 +1,6 @@
 #include "Car.h"
 #include "Route.h"
+#include "SensorFusion.h"
 #include "helpers.h"
 
 using namespace udacity;
@@ -27,10 +28,10 @@ Car::Trajectory Car::path() const
     return interpolatePath(carPosition, spline, 50);
 }
 
-void Car::update(const std::shared_ptr<Telemetry> &tm)
+void Car::update(const std::shared_ptr<Telemetry> &tm, const SensorFusion &sensorFusion)
 {
     m_telemetry = tm;
-    m_fsm.update(m_telemetry);
+    m_fsm.update(m_telemetry, sensorFusion);
 }
 
 void Car::setRoute(const std::shared_ptr<Route> &route)

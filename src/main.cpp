@@ -75,8 +75,10 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
             if (event == "telemetry")
             {
                 const auto tm = createTelemetry(j);
-                car.update(tm);
-                udacity::SensorFusion sensorFusion(j, route, tm);
+                const udacity::SensorFusion sensorFusion(j, route, tm);
+
+                car.update(tm, sensorFusion);
+
                 nlohmann::json outMsg;
                 std::tie(outMsg["next_x"], outMsg["next_y"]) = car.path();
                 auto msg = "42[\"control\"," + outMsg.dump() + "]";

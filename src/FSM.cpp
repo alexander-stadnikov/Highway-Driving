@@ -1,6 +1,7 @@
 #include "FSM.h"
 #include "Route.h"
 #include "Telemetry.h"
+#include "SensorFusion.h"
 
 #include <cmath>
 #include <iostream>
@@ -75,7 +76,8 @@ namespace udacity
     {
     }
 
-    void FSM::update(const std::shared_ptr<udacity::Telemetry> &tm) noexcept
+    void FSM::update(const std::shared_ptr<udacity::Telemetry> &tm,
+                     const SensorFusion &sensorFusion) noexcept
     {
         auto minCost = std::numeric_limits<double>::max();
 

@@ -12,6 +12,8 @@
 
 namespace udacity
 {
+    class SensorFusion;
+
     class Car
     {
     public:
@@ -20,7 +22,7 @@ namespace udacity
     public:
         Car();
 
-        void update(const std::shared_ptr<Telemetry> &);
+        void update(const std::shared_ptr<Telemetry> &, const SensorFusion &sensorFusion);
         Trajectory path() const;
 
         void setRoute(const std::shared_ptr<Route> &);

@@ -8,6 +8,7 @@ namespace udacity
 {
     class Telemetry;
     class Route;
+    class SensorFusion;
 
     class FSM
     {
@@ -22,7 +23,8 @@ namespace udacity
     public:
         explicit FSM(const std::shared_ptr<Route> &route);
 
-        void update(const std::shared_ptr<udacity::Telemetry> &) noexcept;
+        void update(const std::shared_ptr<udacity::Telemetry> &,
+                    const SensorFusion &sensorFusion) noexcept;
         double speed() const noexcept;
         size_t lane() const noexcept;
 
