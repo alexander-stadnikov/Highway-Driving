@@ -101,7 +101,7 @@ Car::Trajectory Car::interpolatePath(const CarPosition &carPosition,
     const double targetX = 30.0;
     const double targetY = (*spline)(targetX);
     const double dst = std::sqrt(targetX * targetX + targetY * targetY);
-    const double N = dst / (0.02 * m_route->maxSpeed());
+    const double N = dst / (0.02 * m_fsm.speed());
     const double dx = targetX / N;
     const double sinYaw = std::sin(carPosition.yaw);
     const double cosYaw = std::cos(carPosition.yaw);
