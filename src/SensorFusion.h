@@ -1,42 +1,34 @@
 #pragma once
 
+#include "Cartesian2D.h"
+#include "Frenet2D.h"
+
 #include "json.hpp"
+
+#include <unordered_map>
+#include <memory>
 
 namespace udacity
 {
+    class Route;
+    class Telemetry;
+
     class SensorFusion
     {
     public:
-        class Vehicle
-        {
-        public:
-            explicit Vehicle(nlohmann::json::const_reference json) : m_data(json)
-            {
-            }
-
-            int id() const { return m_data[0]; }
-            double x() const { return m_data[1]; }
-            double y() const { return m_data[2]; }
-            double vx() const { return m_data[3]; }
-            double vy() const { return m_data[4]; }
-            double s() const { return m_data[5]; }
-            double d() const { return m_data[6]; }
-
-        private:
-            nlohmann::json::const_reference m_data;
-        };
-
-        explicit SensorFusion(const nlohmann::json &json)
-            : m_data(json[1]["sensor_fusion"])
-        {
-        }
-
-        Vehicle operator[](size_t id) const
-        {
-            return Vehicle(m_data[id]);
-        }
+        explicit SensorFusion(const nlohmann::json &,
+                              const std::shared_ptr<Route> &,
+                              const std::shared_ptr<Telemetry> &);
 
     private:
-        nlohmann::json::const_reference &m_data;
+        struct Vehicle
+        {
+            int id;
+            Cartesian2D cartesian;
+            Cartesian2D v;
+            Frenet2D frenet;
+        };
+
+        std::unordered_map<int, Vehicle> m_vehicles;
     };
 }

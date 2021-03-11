@@ -12,7 +12,8 @@ set(sources
         src/Car.cpp
         src/helpers.cpp
         src/Route.cpp
-        src/FSM.cpp)
+        src/FSM.cpp
+        src/SensorFusion.cpp)
 
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

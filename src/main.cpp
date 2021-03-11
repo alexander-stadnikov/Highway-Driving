@@ -14,7 +14,8 @@
 #include "Telemetry.h"
 #include "SensorFusion.h"
 
-void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode, udacity::Car &car);
+void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode,
+                    udacity::Car &ca, const std::shared_ptr<udacity::Route> &);
 std::shared_ptr<udacity::Telemetry> createTelemetry(const nlohmann::json &);
 
 int main()
@@ -27,9 +28,9 @@ int main()
     udacity::Car car;
     car.setRoute(route);
 
-    h.onMessage([&car](uWS::WebSocket<uWS::SERVER> ws, char *data,
-                       size_t length, uWS::OpCode opCode) {
-        processMessage(ws, data, length, opCode, car);
+    h.onMessage([&car, &route](uWS::WebSocket<uWS::SERVER> ws, char *data,
+                               size_t length, uWS::OpCode opCode) {
+        processMessage(ws, data, length, opCode, car, route);
     });
 
     h.onConnection([&h](uWS::WebSocket<uWS::SERVER> ws, uWS::HttpRequest req) {
@@ -57,7 +58,7 @@ int main()
 }
 
 void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
-                    uWS::OpCode, udacity::Car &car)
+                    uWS::OpCode, udacity::Car &car, const std::shared_ptr<udacity::Route> &route)
 {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -73,8 +74,9 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
 
             if (event == "telemetry")
             {
-                car.update(createTelemetry(j));
-                udacity::SensorFusion sensorFusion(j);
+                const auto tm = createTelemetry(j);
+                car.update(tm);
+                udacity::SensorFusion sensorFusion(j, route, tm);
                 nlohmann::json outMsg;
                 std::tie(outMsg["next_x"], outMsg["next_y"]) = car.path();
                 auto msg = "42[\"control\"," + outMsg.dump() + "]";
