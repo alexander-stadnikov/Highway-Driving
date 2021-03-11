@@ -14,8 +14,6 @@ namespace udacity
     public:
         enum class State
         {
-            Accelerate,
-            Brake,
             KeepLane,
             ChangeLeft,
             ChangeRight

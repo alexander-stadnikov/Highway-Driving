@@ -7,7 +7,7 @@
 
 namespace
 {
-    double accelerationSpeed(double behaviourSpeed, double currentSpeed) noexcept
+    double accelerationPrice(double behaviourSpeed, double currentSpeed) noexcept
     {
         constexpr double Price = 10e4;
         return std::isless(currentSpeed, behaviourSpeed) ? -Price : 5.0 * Price;
@@ -16,6 +16,11 @@ namespace
     double accelerate(double speed)
     {
         return speed + 1.5 * 0.224;
+    }
+
+    double brake(double speed)
+    {
+        return speed - 1.5 * 0.224;
     }
 
     struct Behaviour
@@ -38,12 +43,6 @@ namespace
             state = s;
             switch (state)
             {
-            case State::Accelerate:
-                lane = currentLane;
-                speed = 10.0;
-                cost = accelerationSpeed(speed, currentSpeed);
-                break;
-
             case State::KeepLane:
                 lane = currentLane;
                 speed = route->recommendedSpeed();
@@ -58,18 +57,13 @@ namespace
                 speed = route->maxSpeed();
                 lane = route->laneToRight(currentLane);
                 break;
-
-            case State::Brake:
-                lane = currentLane;
-                speed = std::max(currentSpeed - 5.00, 0.0);
-                break;
             }
         }
 
     private:
         double currentCost(double currentSpeed) noexcept
         {
-            return cost;
+            return accelerationPrice(speed, currentSpeed);
         }
     };
 }
@@ -77,12 +71,10 @@ namespace
 namespace udacity
 {
     FSM::FSM(const std::shared_ptr<Route> &route)
-        : m_state(State::Accelerate),
-          m_transitions({{State::Accelerate, {State::Accelerate, State::KeepLane}},
-                         {State::KeepLane, {State::KeepLane, State::ChangeLeft, State::ChangeRight}},
+        : m_state(State::KeepLane),
+          m_transitions({{State::KeepLane, {State::KeepLane, State::ChangeLeft, State::ChangeRight}},
                          {State::ChangeLeft, {State::KeepLane, State::ChangeLeft}},
-                         {State::KeepLane, {State::KeepLane, State::ChangeRight}},
-                         {State::Brake, {State::Brake, State::Accelerate}}}),
+                         {State::KeepLane, {State::KeepLane, State::ChangeRight}}}),
           m_route(route),
           m_speed(0),
           m_lane(0)
@@ -112,19 +104,15 @@ namespace udacity
         const auto currentLane = m_route->frenetToLaneNumber(tm->frenet.d);
         switch (m_state)
         {
-        case State::Accelerate:
-            m_speed = accelerate(m_speed);
-            m_lane = currentLane;
-            break;
-
         case State::KeepLane:
-            m_speed = std::min(accelerate(m_speed), m_route->recommendedSpeed());
+            m_speed = std::isless(m_speed, m_route->recommendedSpeed())
+                          ? accelerate(m_speed)
+                          : brake(m_speed);
             m_lane = currentLane;
             break;
 
         case State::ChangeLeft:
         case State::ChangeRight:
-        case State::Brake:
             break;
         }
     }
