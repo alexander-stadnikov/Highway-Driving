@@ -27,8 +27,7 @@ namespace
 }
 
 Car::Car()
-    : m_speed(0),
-      m_state(State::Accelerate),
+    : m_state(State::Accelerate),
       m_fsm({{State::Accelerate, {State::Accelerate, State::KeepLane}},
              {State::KeepLane, {State::KeepLane, State::ChangeLeft, State::ChangeRight}},
              {State::ChangeLeft, {State::KeepLane, State::ChangeLeft}},
@@ -168,7 +167,7 @@ void Car::updateFsm() noexcept
 
     for (const auto nextState : m_fsm.at(m_state))
     {
-        Behaviour potentialBehaviour(nextState, m_lane, m_speed, m_route);
+        Behaviour potentialBehaviour(nextState, m_lane, m_telemetry->speed, m_route);
 
         if (potentialBehaviour.cost < minCost)
         {

@@ -68,7 +68,6 @@ namespace udacity
 
     private:
         size_t m_lane;
-        double m_speed;
         std::shared_ptr<Telemetry> m_telemetry;
         std::shared_ptr<Route> m_route;
         State m_state;
