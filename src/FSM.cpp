@@ -50,12 +50,12 @@ namespace
 
             case State::ChangeLeft:
                 speed = route->maxSpeed();
-                lane = route->laneToLeft(currentLane);
+                lane = currentLane - 1;
                 break;
 
             case State::ChangeRight:
                 speed = route->maxSpeed();
-                lane = route->laneToRight(currentLane);
+                lane = currentLane + 1;
                 break;
             }
         }

@@ -23,11 +23,9 @@ namespace udacity
         double maxSpeed() const noexcept;
         double recommendedSpeed() const noexcept;
 
-        void setNumberOfLanes(size_t numberOfLanes) noexcept;
-        size_t frenetToLaneNumber(double d) const;
-        double laneCenterToFrenet(size_t) const;
-        size_t laneToLeft(size_t lane) const;
-        size_t laneToRight(size_t lane) const;
+        void setNumberOfLanes(int numberOfLanes) noexcept;
+        int frenetToLaneNumber(double d) const noexcept;
+        double laneCenterToFrenet(int) const noexcept;
 
     private:
         struct Waypoint
@@ -46,6 +44,6 @@ namespace udacity
 
         std::vector<Waypoint> m_waypoints;
         double m_maxSpeed{0.0};
-        size_t m_numberOfLanes{0};
+        int m_numberOfLanes{0};
     };
 }

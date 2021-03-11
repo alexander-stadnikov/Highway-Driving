@@ -4,18 +4,8 @@
 #include <fstream>
 #include <algorithm>
 #include <cmath>
-#include <exception>
 
 using namespace udacity;
-
-namespace
-{
-    template <typename T>
-    std::string msg(const std::string &m, T v)
-    {
-        return m + std::to_string(v);
-    }
-}
 
 Route::Waypoint::Waypoint() noexcept
 {
@@ -99,48 +89,19 @@ void Route::setMaxSpeedMph(const double maxMph) noexcept
     m_maxSpeed = maxMph / 2.24;
 }
 
-void Route::setNumberOfLanes(size_t numberOfLanes) noexcept
+void Route::setNumberOfLanes(int numberOfLanes) noexcept
 {
     m_numberOfLanes = numberOfLanes;
 }
 
-size_t Route::frenetToLaneNumber(double d) const
+int Route::frenetToLaneNumber(double d) const noexcept
 {
-    int intValue = static_cast<int>(d) / 4;
-    if (intValue < 0 || intValue > m_numberOfLanes - 1)
-    {
-        throw std::out_of_range(msg("Unable to convert frenet into lane number: ", d));
-    }
-
-    return intValue;
+    return static_cast<int>(d) / 4 - (std::isless(d, 0.0) ? 1 : 0);
 }
 
-size_t Route::laneToLeft(size_t lane) const
+double Route::laneCenterToFrenet(int lane) const noexcept
 {
-    if (lane == 0 || lane > m_numberOfLanes - 1)
-    {
-        throw std::out_of_range(msg("Unable to find the left line: ", lane));
-    }
-    return lane - 1;
-}
-
-size_t Route::laneToRight(size_t lane) const
-{
-    if (lane >= m_numberOfLanes - 1)
-    {
-        throw std::out_of_range(msg("Unable to find the left line: ", lane));
-    }
-    return lane - 1;
-}
-
-double Route::laneCenterToFrenet(size_t lane) const
-{
-    if (lane >= m_numberOfLanes)
-    {
-        throw std::out_of_range(msg("Unable to convert lane center to frenet: ", lane));
-    }
-
-    return static_cast<double>(lane * 4 + 2);
+    return static_cast<double>(lane * 4 + (lane < 0 ? -2 : 2));
 }
 
 double Route::recommendedSpeed() const noexcept
