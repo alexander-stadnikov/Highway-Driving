@@ -31,9 +31,12 @@ namespace
         State state;
         double cost;
 
-        Behaviour(State s, size_t currentLane, double currentSpeed,
+        Behaviour(State s, const std::shared_ptr<udacity::Telemetry> &tm,
                   const std::shared_ptr<udacity::Route> &route)
         {
+            const auto currentLane = route->frenetToLaneNumber(tm->frenet.d);
+            const auto currentSpeed = tm->speed;
+
             state = s;
             switch (state)
             {
@@ -95,8 +98,7 @@ namespace udacity
 
         for (const auto nextState : m_transitions.at(m_state))
         {
-            Behaviour potentialBehaviour(nextState, m_route->frenetToLaneNumber(tm->frenet.d),
-                                         tm->speed, m_route);
+            Behaviour potentialBehaviour(nextState, tm, m_route);
 
             if (potentialBehaviour.cost < minCost)
             {
