@@ -12,6 +12,7 @@
 #include "Car.h"
 #include "Route.h"
 #include "Telemetry.h"
+#include "SensorFusion.h"
 
 void processMessage(uWS::WebSocket<uWS::SERVER>, char *, size_t, uWS::OpCode, udacity::Car &car);
 std::shared_ptr<udacity::Telemetry> createTelemetry(const nlohmann::json &);
@@ -73,7 +74,7 @@ void processMessage(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
             if (event == "telemetry")
             {
                 car.update(createTelemetry(j));
-                SensorFusion sensorFusion(j);
+                udacity::SensorFusion sensorFusion(j);
                 nlohmann::json outMsg;
                 std::tie(outMsg["next_x"], outMsg["next_y"]) = car.path();
                 auto msg = "42[\"control\"," + outMsg.dump() + "]";
