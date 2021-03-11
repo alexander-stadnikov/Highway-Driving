@@ -29,7 +29,8 @@ namespace udacity
         size_t lane() const noexcept;
 
     private:
-        void transit(const std::shared_ptr<udacity::Telemetry> &) noexcept;
+        void transit(const std::shared_ptr<udacity::Telemetry> &,
+                     double safeSpeed) noexcept;
 
     private:
         State m_state;

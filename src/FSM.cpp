@@ -28,7 +28,8 @@ namespace
         double cost;
 
         Behaviour(State s, const std::shared_ptr<udacity::Telemetry> &tm,
-                  const std::shared_ptr<udacity::Route> &route)
+                  const std::shared_ptr<udacity::Route> &route,
+                  const udacity::SensorFusion &sf)
         {
             const auto currentLane = route->frenetToLaneNumber(tm->frenet.d);
             const auto currentSpeed = tm->speed;
@@ -36,27 +37,50 @@ namespace
             cost = 0.0;
 
             state = s;
+
             switch (state)
             {
             case State::KeepLane:
                 lane = currentLane;
-                speed = route->maxSpeed();
                 break;
 
             case State::ChangeLeft:
-                speed = route->maxSpeed();
                 lane = currentLane - 1;
                 break;
 
             case State::ChangeRight:
-                speed = route->maxSpeed();
                 lane = currentLane + 1;
                 break;
             }
+
+            speed = expectedSpeed(route, sf);
         }
 
     private:
-        double currentCost(double currentSpeed) noexcept
+        double expectedSpeed(const std::shared_ptr<udacity::Route> &route,
+                             const udacity::SensorFusion &sf) const noexcept
+        {
+            const double dst = sf.freeDistanceInFront(lane);
+            const double speedInFront = sf.speedOfVehicleInFront(lane);
+            const double safetyReactionTime = 1.5;
+            const double speedLimit = route->maxSpeed() - 0.2;
+            const double safetyDst = std::min(safetyReactionTime * speedLimit,
+                                              safetyReactionTime * speedInFront);
+            double speed = 0.0;
+
+            if (dst > safetyDst)
+            {
+                return speedLimit;
+            }
+            else if (dst > 2.0 * safetyDst / 3.0)
+            {
+                return speedInFront;
+            }
+
+            return speedInFront - 5.0;
+        }
+
+        double currentCost(double currentSpeed) const noexcept
         {
             return cost;
         }
@@ -80,28 +104,31 @@ namespace udacity
                      const SensorFusion &sensorFusion) noexcept
     {
         auto minCost = std::numeric_limits<double>::max();
+        auto safeSpeed = tm->speed;
 
         for (const auto nextState : m_transitions.at(m_state))
         {
-            Behaviour potentialBehaviour(nextState, tm, m_route);
+            Behaviour potentialBehaviour(nextState, tm, m_route, sensorFusion);
 
             if (potentialBehaviour.cost < minCost)
             {
                 minCost = potentialBehaviour.cost;
                 m_state = potentialBehaviour.state;
+                safeSpeed = potentialBehaviour.speed;
             }
         }
 
-        transit(tm);
+        transit(tm, safeSpeed);
     }
 
-    void FSM::transit(const std::shared_ptr<udacity::Telemetry> &tm) noexcept
+    void FSM::transit(const std::shared_ptr<udacity::Telemetry> &tm,
+                      double safeSpeed) noexcept
     {
         const auto currentLane = m_route->frenetToLaneNumber(tm->frenet.d);
         switch (m_state)
         {
         case State::KeepLane:
-            m_speed = std::isless(m_speed, m_route->recommendedSpeed())
+            m_speed = std::isless(m_speed, safeSpeed)
                           ? accelerate(m_speed)
                           : brake(m_speed);
             m_lane = currentLane;
