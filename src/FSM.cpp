@@ -83,7 +83,9 @@ namespace udacity
                          {State::ChangeLeft, {State::KeepLane, State::ChangeLeft}},
                          {State::KeepLane, {State::KeepLane, State::ChangeRight}},
                          {State::Brake, {State::Brake, State::Accelerate}}}),
-          m_route(route)
+          m_route(route),
+          m_speed(0),
+          m_lane(0)
     {
     }
 
@@ -102,5 +104,39 @@ namespace udacity
                 m_state = potentialBehaviour.state;
             }
         }
+
+        transit(tm);
+    }
+
+    void FSM::transit(const std::shared_ptr<udacity::Telemetry> &tm) noexcept
+    {
+        const auto currentLane = m_route->frenetToLaneNumber(tm->frenet.d);
+        switch (m_state)
+        {
+        case State::Accelerate:
+            m_speed += 0.2;
+            m_lane = currentLane;
+            break;
+
+        case State::KeepLane:
+            m_speed = m_route->maxSpeed(); // TODO: Use adaptive speed
+            m_lane = currentLane;
+            break;
+
+        case State::ChangeLeft:
+        case State::ChangeRight:
+        case State::Brake:
+            break;
+        }
+    }
+
+    double FSM::speed() const noexcept
+    {
+        return m_speed;
+    }
+
+    size_t FSM::lane() const noexcept
+    {
+        return m_lane;
     }
 }
