@@ -44,7 +44,7 @@ void Car::addIntermediatePoints(const std::vector<double> &points,
     for (const auto p : points)
     {
         const auto wp = m_route->toCartesian({m_telemetry->frenet.s + p,
-                                              m_route->laneCenterToFrenet(m_lane)});
+                                              m_route->laneCenterToFrenet(m_fsm.lane())});
         x.push_back(wp.x);
         y.push_back(wp.y);
     }
@@ -127,9 +127,4 @@ Car::Trajectory Car::interpolatePath(const CarPosition &carPosition,
     }
 
     return {trajectoryX, trajectoryY};
-}
-
-void Car::setLane(size_t lane) noexcept
-{
-    m_lane = lane;
 }

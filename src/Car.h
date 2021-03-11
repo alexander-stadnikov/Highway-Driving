@@ -24,7 +24,6 @@ namespace udacity
         Trajectory path() const;
 
         void setRoute(const std::shared_ptr<Route> &);
-        void setLane(size_t lane) noexcept;
 
     private:
         struct CarPosition
@@ -43,7 +42,6 @@ namespace udacity
                                         const std::shared_ptr<tk::spline> &, int pathLength) const;
 
     private:
-        size_t m_lane;
         std::shared_ptr<Telemetry> m_telemetry;
         std::shared_ptr<Route> m_route;
         FSM m_fsm;
