@@ -24,7 +24,11 @@ namespace udacity
                               const std::shared_ptr<Telemetry> &) noexcept;
 
         double freeDistanceInFront(int lane) const noexcept;
+        double freeDistanceBehind(int lane) const noexcept;
         double speedOfVehicleInFront(int lane) const noexcept;
+
+    private:
+        double freeDistanceAtLane(int lane) const noexcept;
 
     private:
         struct Vehicle

@@ -71,13 +71,7 @@ namespace udacity
 
     double SensorFusion::freeDistanceInFront(int lane) const noexcept
     {
-        lane = laneInFront(lane);
-        if (m_vehicles.count(lane) == 0)
-        {
-            return Unlimited;
-        }
-
-        return m_vehicles.at(lane).frenet.s - m_tm->frenet.s;
+        return freeDistanceAtLane(laneInFront(lane));
     }
 
     double SensorFusion::speedOfVehicleInFront(int lane) const noexcept
@@ -90,5 +84,20 @@ namespace udacity
 
         const auto &v = m_vehicles.at(lane).v;
         return std::sqrt(std::pow(v.x, 2) + std::pow(v.y, 2));
+    }
+
+    double SensorFusion::freeDistanceBehind(int lane) const noexcept
+    {
+        return freeDistanceAtLane(lane);
+    }
+
+    double SensorFusion::freeDistanceAtLane(int lane) const noexcept
+    {
+        if (m_vehicles.count(lane) == 0)
+        {
+            return Unlimited;
+        }
+
+        return std::fabs(m_vehicles.at(lane).frenet.s - m_tm->frenet.s);
     }
 }
