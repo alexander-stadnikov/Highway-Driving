@@ -21,6 +21,7 @@ namespace udacity
 
         void setMaxSpeedMph(const double maxMph) noexcept;
         double maxSpeed() const noexcept;
+        double recommendedSpeed() const noexcept;
 
         void setNumberOfLanes(size_t numberOfLanes) noexcept;
         size_t frenetToLaneNumber(double d) const;

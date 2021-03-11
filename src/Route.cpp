@@ -142,3 +142,8 @@ double Route::laneCenterToFrenet(size_t lane) const
 
     return static_cast<double>(lane * 4 + 2);
 }
+
+double Route::recommendedSpeed() const noexcept
+{
+    return maxSpeed() - 0.5;
+}

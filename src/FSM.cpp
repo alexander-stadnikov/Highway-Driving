@@ -13,6 +13,11 @@ namespace
         return std::isless(currentSpeed, behaviourSpeed) ? -Price : 5.0 * Price;
     }
 
+    double accelerate(double speed)
+    {
+        return speed + 1.5 * 0.224;
+    }
+
     struct Behaviour
     {
         using State = udacity::FSM::State;
@@ -41,7 +46,7 @@ namespace
 
             case State::KeepLane:
                 lane = currentLane;
-                speed = route->maxSpeed() - 0.5;
+                speed = route->recommendedSpeed();
                 break;
 
             case State::ChangeLeft:
@@ -108,17 +113,13 @@ namespace udacity
         switch (m_state)
         {
         case State::Accelerate:
-            m_speed += 0.224;
+            m_speed = accelerate(m_speed);
             m_lane = currentLane;
-
-            std::cout << "Accelerate" << std::endl;
             break;
 
         case State::KeepLane:
-            m_speed = std::min(m_speed + 0.224, m_route->maxSpeed() - 0.5); // TODO: Use adaptive speed
+            m_speed = std::min(accelerate(m_speed), m_route->recommendedSpeed());
             m_lane = currentLane;
-
-            std::cout << "KeepLane" << std::endl;
             break;
 
         case State::ChangeLeft:
