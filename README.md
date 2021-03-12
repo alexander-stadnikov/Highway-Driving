@@ -2,6 +2,10 @@
 
 This repository contains the implementation of the "Highway Driving" Project for Udacity Course Self-Driving Car Engineer.
 
+[**Full video**](https://www.youtube.com/watch?v=rsWu45vMMPk)
+
+![alt](./example.gif)
+
 ## Goals
 
 A Self-Driving Car must be able to plan a safe and efficient route.
