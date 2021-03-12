@@ -65,11 +65,11 @@ namespace
                                               safetyDistance(speedInFront));
             double speed = 0.0;
 
-            if (dst > safetyDst)
+            if (std::isgreater(dst, safetyDst))
             {
                 return speedLimit;
             }
-            else if (dst > 2.0 * safetyDst / 3.0)
+            else if (std::isgreater(dst, 2.0 * safetyDst / 3.0))
             {
                 return speedInFront;
             }
@@ -110,7 +110,7 @@ namespace
         {
             if (std::isless(dst, 75) && speed != udacity::SensorFusion::Unlimited)
             {
-                return 10 * (lim - speed) * 10e2;
+                return 10.0 * (lim - speed) * 10e2;
             }
 
             return 0.0;
@@ -118,17 +118,17 @@ namespace
 
         static double avoidCollision(double front, double back, double safety) noexcept
         {
-            double cost = 0;
-            if (front < 10)
+            double cost = 0.0;
+            if (std::isless(front, 10))
             {
                 cost += 10e6;
             }
-            else if (front < safety * .25)
+            else if (std::isless(front, safety * .25))
             {
                 cost += 10e5;
             }
 
-            if (back < 6.5)
+            if (std::isless(back, 6.5))
             {
                 cost += 10e6;
             }
@@ -138,14 +138,14 @@ namespace
 
         static double takeFreeLane(double front) noexcept
         {
-            return -1 * std::min(75.0, front) * 10e2;
+            return -1.0 * std::min(75.0, front) * 10e2;
         }
 
         double keepUntilFast(double currentSpeed,
                              int currentLane) const noexcept
         {
             return std::isless(currentSpeed, 25.0) && lane == currentLane
-                       ? -5 * 10e6
+                       ? -5.0 * 10e6
                        : 0.0;
         }
 
@@ -192,7 +192,7 @@ namespace udacity
         {
             Behaviour potentialBehaviour(nextState, tm, m_route, sensorFusion);
 
-            if (potentialBehaviour.cost < minCost)
+            if (std::isless(potentialBehaviour.cost, minCost))
             {
                 minCost = potentialBehaviour.cost;
                 m_state = potentialBehaviour.state;
@@ -210,6 +210,7 @@ namespace udacity
         m_speed = std::isless(m_speed, safeSpeed)
                       ? accelerate(m_speed)
                       : brake(m_speed);
+
         switch (m_state)
         {
         case State::KeepLane:

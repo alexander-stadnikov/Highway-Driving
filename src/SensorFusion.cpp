@@ -53,20 +53,6 @@ namespace udacity
                 m_vehicles[lane] = v;
             }
         }
-
-        // for (const auto &it : m_vehicles)
-        // {
-        //     if (it.first >= 100)
-        //     {
-        //         std::cout << "FRONT: " << it.first / 100;
-        //     }
-        //     else
-        //     {
-        //         std::cout << "BACK: " << it.first;
-        //     }
-        //     std::cout << " -> " << it.second.id << " : " << std::fabs(tm->frenet.s - it.second.frenet.s) << std::endl;
-        // }
-        // std::cout << "-------------------------------------------" << std::endl;
     }
 
     double SensorFusion::freeDistanceInFront(int lane) const noexcept

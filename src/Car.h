@@ -17,7 +17,8 @@ namespace udacity
     class Car
     {
     public:
-        using Trajectory = std::tuple<std::vector<double>, std::vector<double>>;
+        using Trajectory = std::tuple<std::vector<double>,
+                                      std::vector<double>>;
 
     public:
         Car();
