@@ -207,9 +207,23 @@ namespace udacity
                       double safeSpeed) noexcept
     {
         const auto currentLane = m_route->frenetToLaneNumber(tm->frenet.d);
+        m_previousSpeed = m_speed;
         m_speed = std::isless(m_speed, safeSpeed)
                       ? accelerate(m_speed)
                       : brake(m_speed);
+
+        double dV = m_speed - m_previousSpeed;
+        double dT = 0.02;
+        double A = dV / dT;
+        double J = A / dT;
+        const double maxA = 9.0;
+        const double maxJ = 9.0;
+        if (std::isgreaterequal(std::fabs(A), maxA) || std::isgreaterequal(std::fabs(J), maxJ))
+        {
+            const double K = maxA / std::fabs(A);
+            dV *= K;
+            m_speed = m_previousSpeed + dV;
+        }
 
         switch (m_state)
         {

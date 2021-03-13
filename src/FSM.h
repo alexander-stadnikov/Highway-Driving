@@ -37,6 +37,7 @@ namespace udacity
         const std::unordered_map<State, std::vector<State>> m_transitions;
         const std::shared_ptr<Route> &m_route;
         double m_speed;
+        double m_previousSpeed{0.0};
         size_t m_lane;
     };
 }
