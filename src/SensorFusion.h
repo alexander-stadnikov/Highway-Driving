@@ -16,7 +16,7 @@ namespace udacity
     class SensorFusion
     {
     public:
-        static constexpr double Unlimited = 1e6;
+        static const double Unlimited;
 
     public:
         explicit SensorFusion(const nlohmann::json &,

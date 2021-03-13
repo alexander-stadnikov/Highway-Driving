@@ -74,7 +74,7 @@ namespace udacity
             y.push_back(p1.y);
         }
 
-        addIntermediatePoints({60.0, 80.0, 100.0}, x, y);
+        addIntermediatePoints({60.0, 80.0}, x, y);
         convertFromGlobalToLocal(carPosition, x, y);
         auto f = std::make_shared<tk::spline>();
         f->set_points(x, y);

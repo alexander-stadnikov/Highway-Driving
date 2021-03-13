@@ -16,6 +16,8 @@ namespace
 
 namespace udacity
 {
+    const double SensorFusion::Unlimited = 1e6;
+
     SensorFusion::SensorFusion(const nlohmann::json &json,
                                const std::shared_ptr<Route> &route,
                                const std::shared_ptr<Telemetry> &tm) noexcept

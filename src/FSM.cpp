@@ -60,7 +60,7 @@ namespace
             const double dst = sf.freeDistanceInFront(lane);
             const double speedInFront = sf.speedOfVehicleInFront(lane);
 
-            const double speedLimit = route->maxSpeed() - 0.2;
+            const double speedLimit = route->maxSpeed();
             const double safetyDst = std::min(safetyDistance(speedLimit),
                                               safetyDistance(speedInFront));
             double speed = 0.0;
@@ -91,13 +91,13 @@ namespace
         double stayOnTheRoad(int numberOfLanes) const noexcept
         {
             return lane < 0 || lane >= numberOfLanes
-                       ? 5 * 10e6
+                       ? 15 * 10e6
                        : 0.0;
         }
 
         double overtake(int currentLane, double dst, double lim, double laneSpeed) const noexcept
         {
-            if (std::isless(dst, 75) && laneSpeed != udacity::SensorFusion::Unlimited)
+            if (std::islessequal(dst, 75) && laneSpeed != udacity::SensorFusion::Unlimited)
             {
                 return 10.0 * (lim - laneSpeed) * 10e2;
             }
@@ -117,18 +117,22 @@ namespace
         static double avoidCollision(double front, double back, double safety) noexcept
         {
             double cost = 0.0;
-            if (std::isless(front, 10))
+            if (std::islessequal(front, 10))
             {
                 cost += 10e6;
             }
-            else if (std::isless(front, safety * .25))
+            else if (std::islessequal(front, safety * .25))
             {
                 cost += 2 * 10e6;
             }
 
-            if (std::isless(back, 10.0))
+            if (std::islessequal(back, 10.0))
             {
                 cost += 10e6;
+            }
+            else if (std::islessequal(back, safety * .25))
+            {
+                cost += 2 * 10e6;
             }
 
             return cost;
@@ -142,7 +146,7 @@ namespace
         double keepUntilFast(double currentSpeed,
                              int currentLane) const noexcept
         {
-            return std::isless(currentSpeed, 25.0) && lane == currentLane
+            return std::islessequal(currentSpeed, 25.0) && lane == currentLane
                        ? -5.0 * 10e6
                        : 0.0;
         }
@@ -159,7 +163,20 @@ namespace
             const double speedLimit = route->maxSpeed();
             double safetyDst = safetyDistance(route->maxSpeed());
 
-            return keepLane(currentLane) +
+            double preferRight = 0.0;
+            // if (currentLane >= 0 && currentLane < route->numberOfLanes() - 1)
+            // {
+            //     // const double currentLaneIsFree = (std::isgreater(dstInFront, std::min(udacity::SensorFusion::Unlimited, 75.0)));
+            //     // const auto rightLaneIsFree = (std::isgreater(sf.freeDistanceInFront(lane + 1), std::min(udacity::SensorFusion::Unlimited, 75.0)));
+            //     const double currentLaneIsFree = (dstInFront == udacity::SensorFusion::Unlimited);
+            //     const auto rightLaneIsFree = (sf.freeDistanceInFront(currentLane + 1) == udacity::SensorFusion::Unlimited);
+            //     if (rightLaneIsFree && lane == currentLane + 1)
+            //     {
+            //         preferRight = -11 * 10e2;
+            //     }
+            // }
+
+            return preferRight + keepLane(currentLane) +
                    stayOnTheRoad(route->numberOfLanes()) +
                    overtake(currentLane, dstInFront, speedLimit, sf.speedOfVehicleInFront(lane)) +
                    avoidCollision(dstInFront, dstBehind, safetyDst) +
