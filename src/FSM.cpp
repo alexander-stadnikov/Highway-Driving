@@ -102,7 +102,7 @@ namespace
         double stayOnTheRoad(int numberOfLanes) const noexcept
         {
             return lane < 0 || lane >= numberOfLanes
-                       ? 10e6
+                       ? 5 * 10e6
                        : 0.0;
         }
 
