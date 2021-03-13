@@ -106,11 +106,11 @@ namespace
                        : 0.0;
         }
 
-        static double overtake(double dst, double lim, double speed) noexcept
+        static double overtake(double dst, double dstCurrent, double lim, double laneSpeed) noexcept
         {
-            if (std::isless(dst, 75) && speed != udacity::SensorFusion::Unlimited)
+            if (std::isless(dst, 75) && laneSpeed != udacity::SensorFusion::Unlimited)
             {
-                return 10.0 * (lim - speed) * 10e2;
+                return 10.0 * (lim - laneSpeed) * 10e2;
             }
 
             return 0.0;
@@ -125,10 +125,10 @@ namespace
             }
             else if (std::isless(front, safety * .25))
             {
-                cost += 10e5;
+                cost += 2 * 10e6;
             }
 
-            if (std::isless(back, 6.5))
+            if (std::isless(back, 10.0))
             {
                 cost += 10e6;
             }
@@ -138,7 +138,7 @@ namespace
 
         static double takeFreeLane(double front) noexcept
         {
-            return -1.0 * std::min(75.0, front) * 10e2;
+            return -5.0 * std::min(75.0, front) * 10e2;
         }
 
         double keepUntilFast(double currentSpeed,
@@ -153,15 +153,18 @@ namespace
                              const std::shared_ptr<udacity::Route> &route,
                              const udacity::SensorFusion &sf) const noexcept
         {
-            const double dstInFront = sf.freeDistanceInFront(lane);
-            const double dstBehind = sf.freeDistanceBehind(lane);
+            const auto currentLane = route->frenetToLaneNumber(tm->frenet.d);
+
+            const auto dstInFront = sf.freeDistanceInFront(lane);
+            const auto dstBehind = sf.freeDistanceBehind(lane);
+            const auto dstInFrontCurrent = sf.freeDistanceBehind(lane);
+
             const double speedLimit = route->maxSpeed();
             double safetyDst = safetyDistance(route->maxSpeed());
-            const auto currentLane = route->frenetToLaneNumber(tm->frenet.d);
 
             return keepOrPreferRight(currentLane) +
                    stayOnTheRoad(route->numberOfLanes()) +
-                   overtake(dstInFront, speedLimit, sf.speedOfVehicleInFront(lane)) +
+                   overtake(dstInFront, dstInFrontCurrent, speedLimit, sf.speedOfVehicleInFront(lane)) +
                    avoidCollision(dstInFront, dstBehind, safetyDst) +
                    takeFreeLane(dstInFront) +
                    keepUntilFast(tm->speed, currentLane);
